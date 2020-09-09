@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "wpa.wp.myapplication"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -30,6 +30,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -49,10 +53,8 @@ dependencies {
     // Gson
     implementation "com.google.code.gson:gson:$gson_version"
 
-    // Koin
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    implementation "org.koin:koin-androidx-scope:$koin_version"
+    //loging
+    implementation("com.squareup.okhttp3:logging-interceptor:4.8.1")
 
     //material design
     implementation "com.google.android.material:material:$material_version"
@@ -80,6 +82,9 @@ dependencies {
 
     //stetho
     implementation "com.facebook.stetho:stetho:$stetho_version"
+
+    //timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"

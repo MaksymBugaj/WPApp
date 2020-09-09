@@ -1,7 +1,8 @@
-package wpa.wp.myapplication
+package wpa.wp.myapplication.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import wpa.wp.myapplication.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
