@@ -17,7 +17,7 @@ interface ApiService {
 
 
     @GET("quizzes/0/100/")
-    fun getQuizes(): Single<List<Quiz>>
+    fun getQuizes(): Single<Quiz>
 
     @GET("quiz/{id_quizu}/0")
     fun getSpecificQuiz(

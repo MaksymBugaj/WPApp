@@ -1,6 +1,7 @@
 package wpa.wp.myapplication.data.db.entity.details
 
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -11,11 +12,13 @@ data class QuizDetails(
     val buttonStart: String,
     val canonical: String,
     val categories: List<Category>,
+    @Embedded(prefix = "categoryX_")
     val category: CategoryX,
+    @Embedded(prefix = "celebrity_")
     val celebrity: Celebrity,
-    val cityAvg: Any,
-    val cityCount: Any,
-    val cityTime: Any,
+    val cityAvg: Double,
+    val cityCount: Double,
+    val cityTime: String,
     val content: String,
     val created: Int,
     val createdAt: String,
@@ -23,6 +26,7 @@ data class QuizDetails(
     val id: Long,
     val isBattle: Boolean,
     val latestResults: List<LatestResult>,
+    @Embedded(prefix = "mainPhoto_")
     val mainPhoto: MainPhoto,
     @SerializedName("opinions_enabled")
     val opinionsEnabled: Boolean,
@@ -33,6 +37,7 @@ data class QuizDetails(
     val scripts: String,
     val shareTitle: String,
     val sponsored: Boolean,
+    @Embedded(prefix = "sponsoredResults_")
     val sponsoredResults: SponsoredResults,
     val tags: List<Tag>,
     val title: String,

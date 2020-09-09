@@ -1,4 +1,12 @@
 package wpa.wp.myapplication.di
 
-class ActivityBuildersModule {
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+import wpa.wp.myapplication.ui.MainActivity
+
+@Module
+abstract class ActivityBuildersModule {
+
+    @ContributesAndroidInjector
+    abstract fun contributeMainActivity() : MainActivity
 }

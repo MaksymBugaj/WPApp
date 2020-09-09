@@ -13,6 +13,6 @@ interface QuizDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertQuiz(quiz: Quiz)
 
-    @Query("select * from quiz_table where ")
+    @Query("select * from quiz_table")
     fun getQuiz(): Single<Quiz>
 }
