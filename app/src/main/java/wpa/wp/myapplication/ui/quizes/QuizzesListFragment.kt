@@ -1,8 +1,6 @@
 package wpa.wp.myapplication.ui.quizes
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +10,12 @@ import wpa.wp.myapplication.R
 import wpa.wp.myapplication.di.ViewModelProviderFactory
 import javax.inject.Inject
 
-class QuizesListFragment : DaggerFragment() {
+class QuizzesListFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    private val viewModel: QuizesListViewModel by viewModels {
+    private val viewModel: QuizzesListViewModel by viewModels {
         viewModelProviderFactory
     }
 

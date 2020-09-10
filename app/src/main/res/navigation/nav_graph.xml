@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/quizesListFragment"
-        android:name="wpa.wp.myapplication.ui.quizes.QuizesListFragment"
+        android:name="wpa.wp.myapplication.ui.quizes.QuizzesListFragment"
         android:label="quizes_list_fragment"
         tools:layout="@layout/quizes_list_fragment" />
 </navigation>

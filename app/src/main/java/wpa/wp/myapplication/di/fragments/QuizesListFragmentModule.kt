@@ -6,18 +6,18 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import wpa.wp.myapplication.di.ViewModelKey
-import wpa.wp.myapplication.ui.quizes.QuizesListFragment
-import wpa.wp.myapplication.ui.quizes.QuizesListViewModel
+import wpa.wp.myapplication.ui.quizes.QuizzesListFragment
+import wpa.wp.myapplication.ui.quizes.QuizzesListViewModel
 
 @Module
 abstract class QuizesListFragmentModule {
 
     @ContributesAndroidInjector
-    abstract fun contributeQuizesListFragment(): QuizesListFragment
+    abstract fun contributeQuizesListFragment(): QuizzesListFragment
 
 
     @Binds
     @IntoMap
-    @ViewModelKey(QuizesListViewModel::class)
-    abstract fun bindQuizesListViewModel(quizesListViewModel: QuizesListViewModel) : ViewModel
+    @ViewModelKey(QuizzesListViewModel::class)
+    abstract fun bindQuizesListViewModel(quizzesListViewModel: QuizzesListViewModel) : ViewModel
 }

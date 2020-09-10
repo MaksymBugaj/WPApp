@@ -1,10 +1,9 @@
 package wpa.wp.myapplication.data.repository
 
 import io.reactivex.Completable
-import io.reactivex.SingleObserver
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import wpa.wp.myapplication.data.db.QuizDao
@@ -17,24 +16,23 @@ class DatabaseRepositoryImpl(
 
     private val compositeDisposable = CompositeDisposable()
 
-    private fun insert(list: Quiz) {
+    private fun insert(quiz: Quiz) {
         compositeDisposable.add(
             Completable.fromAction {
-                quizDao.insertQuiz(list)
+                quizDao.insertQuiz(quiz)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
-                Timber.tag("NOPE").d("cummed in database")
+                Timber.tag("NOPE").d("quizzes in in database")
             }
         )
     }
 
-    override fun getQuizes() {
+    override fun getQuizzes() {
         quizApiRepository.getQuizes()
         compositeDisposable.add(
             quizApiRepository.quizDownloaded.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
                 it?.let {
-
+                    Timber.tag("NOPE").d("Lets insert")
                         insert(it)
-
                 }
             }
         )
@@ -43,4 +41,10 @@ class DatabaseRepositoryImpl(
     override fun getQuizDetails() {
         TODO("Not yet implemented")
     }
+
+    override fun getQuizList(): Single<Quiz> {
+        return quizDao.getQuiz()
+    }
+
+
 }
