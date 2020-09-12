@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
+import wpa.wp.myapplication.data.db.entity.quiz.Item
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 
 @Database(

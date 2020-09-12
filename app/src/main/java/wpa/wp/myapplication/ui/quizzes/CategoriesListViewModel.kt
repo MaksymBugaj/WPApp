@@ -1,27 +1,25 @@
-package wpa.wp.myapplication.ui.quizes
+package wpa.wp.myapplication.ui.quizzes
 
 import androidx.lifecycle.ViewModel
-import androidx.room.EmptyResultSetException
-import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 import wpa.wp.myapplication.data.repository.DatabaseRepository
-import java.lang.Exception
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class QuizzesListViewModel @Inject constructor(
+class CategoriesListViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private var repeater = false
+
+    val data = PublishSubject.create<Quiz>()
+
 
     init {
         Timber.tag("NOPE").d("init")
@@ -32,6 +30,7 @@ class QuizzesListViewModel @Inject constructor(
         databaseRepository.getQuizList().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).retry().subscribe(object: SingleObserver<Quiz>{
             override fun onSuccess(t: Quiz) {
                 Timber.tag("NOPE").d("succes ${t.items.size}")
+                data.onNext(t)
             }
 
             override fun onSubscribe(d: Disposable) {
@@ -65,7 +64,7 @@ class QuizzesListViewModel @Inject constructor(
         //databaseRepository.getQuizzes()
 
 
-        Timber.tag("NOPE").d("init")
+//        Timber.tag("NOPE").d("init")
 
     }
 

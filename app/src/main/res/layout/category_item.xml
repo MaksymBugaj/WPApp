@@ -11,7 +11,7 @@
 
     <!--todo fix it and rebuild-->
     <androidx.cardview.widget.CardView
-        android:id="@+id/quizItem_root"
+        android:id="@+id/categoryItem_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -21,7 +21,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/quizItem_layout"
+            android:id="@+id/categoryItem_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +30,7 @@
             app:layout_constraintTop_toBottomOf="parent">
 
             <ImageView
-                android:id="@+id/quizItem_topImage"
+                android:id="@+id/categoryItem_topImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -39,23 +39,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tempHolder"/>
+                app:layout_constraintBottom_toTopOf="@id/categoryTempHolder"/>
 
 
             <LinearLayout
-                android:id="@+id/tempHolder"
+                android:id="@+id/categoryTempHolder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/quizItem_check"
+                app:layout_constraintEnd_toStartOf="@id/categoryItem_check"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quizItem_topImage">
+                app:layout_constraintTop_toBottomOf="@id/categoryItem_topImage">
 
 
                 <TextView
-                    android:id="@+id/quizItem_itemName"
+                    android:id="@+id/categoryItem_itemName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -71,7 +71,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/quizItemLayout_price"
+                        android:id="@+id/categoryItemLayout_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -84,7 +84,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/quizItem_price"
+                        android:id="@+id/categoryItem_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -92,13 +92,13 @@
                         android:maxLines="1"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                         android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="@id/quizItem_description"
+                        app:layout_constraintStart_toStartOf="@id/categoryItem_description"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="Some comment"/>
 
 
                     <TextView
-                        android:id="@+id/quizItemLayout_description"
+                        android:id="@+id/categoryItemLayout_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -106,11 +106,11 @@
                         android:maxLines="1"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                         android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="@id/quizItemLayout_price"
-                        app:layout_constraintTop_toBottomOf="@id/quizItemLayout_price" />
+                        app:layout_constraintStart_toStartOf="@id/categoryItemLayout_price"
+                        app:layout_constraintTop_toBottomOf="@id/categoryItemLayout_price" />
 
                     <TextView
-                        android:id="@+id/quizItem_description"
+                        android:id="@+id/categoryItem_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -119,15 +119,15 @@
                         android:maxLines="1"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                         android:textSize="14sp"
-                        app:layout_constraintStart_toEndOf="@id/quizItemLayout_description"
-                        app:layout_constraintTop_toBottomOf="@id/quizItem_price"
+                        app:layout_constraintStart_toEndOf="@id/categoryItemLayout_description"
+                        app:layout_constraintTop_toBottomOf="@id/categoryItem_price"
                         tools:text="Some comment" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
 
             <CheckBox
-                android:id="@+id/quizItem_check"
+                android:id="@+id/categoryItem_check"
                 style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
                 android:layout_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quizItem_topImage" />
+                app:layout_constraintTop_toBottomOf="@id/categoryItem_topImage" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

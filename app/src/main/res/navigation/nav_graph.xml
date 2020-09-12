@@ -3,11 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/quizesListFragment">
+    app:startDestination="@id/categoriesListFragment">
 
     <fragment
-        android:id="@+id/quizesListFragment"
-        android:name="wpa.wp.myapplication.ui.quizes.QuizzesListFragment"
-        android:label="quizes_list_fragment"
-        tools:layout="@layout/quizes_list_fragment" />
+        android:id="@+id/categoriesListFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.CategoriesListFragment"
+        android:label="CATEGORIES"
+        tools:layout="@layout/quizes_list_fragment">
+
+
+        <action
+            android:id="@+id/action_categoriesListFragment_to_quizzesListFragment"
+            app:destination="@id/quizzesListFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.QuizFragment"
+        android:label="QUIZ"
+        tools:layout="@layout/quiz_fragment" >
+
+        <argument
+            android:name="id"
+            app:argType="long"/>
+    </fragment>
+    <fragment
+        android:id="@+id/quizzesListFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.QuizzesListFragment"
+        android:label="QuizzesListFragment" >
+
+        <argument
+            android:name="category"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_quizzesListFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+    </fragment>
 </navigation>

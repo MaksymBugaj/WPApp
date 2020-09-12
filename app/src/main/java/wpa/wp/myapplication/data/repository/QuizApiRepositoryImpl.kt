@@ -7,6 +7,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
+import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 import wpa.wp.myapplication.data.network.ApiService
 
@@ -19,6 +20,10 @@ class QuizApiRepositoryImpl(
     override val quizDownloaded: PublishSubject<Quiz>
         get() = _quizDownloaded
     private val _quizDownloaded = PublishSubject.create<Quiz>()
+
+    override val quizDetailsDownloaded: PublishSubject<QuizDetails>
+        get() = _quizDetailsDownloaded
+    private val _quizDetailsDownloaded = PublishSubject.create<QuizDetails>()
 
     override fun getQuizes() {
         apiService.getQuizes()
@@ -35,7 +40,30 @@ class QuizApiRepositoryImpl(
                 }
 
                 override fun onError(e: Throwable) {
-                    Timber.tag("NOPE").d("Error during fetch API ${e.message} ${e.stackTrace} ${e.localizedMessage}")
+                    Timber.tag("NOPE")
+                        .d("Error during fetch API ${e.message} ${e.stackTrace} ${e.localizedMessage}")
+                }
+
+            })
+    }
+
+    override fun getQuizDetails(id: Long) {
+        apiService.getSpecificQuiz(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : SingleObserver<QuizDetails> {
+                override fun onSuccess(t: QuizDetails) {
+                    _quizDetailsDownloaded.onNext(t)
+                    Timber.tag("NOPE").d("we have data Quiz ${t}")
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                    compositeDisposable.add(d)
+                }
+
+                override fun onError(e: Throwable) {
+                    Timber.tag("NOPE")
+                        .d("Error during fetch QUIZ API ${e.message} : ${e.stackTrace} : ${e.localizedMessage}")
                 }
 
             })

@@ -8,39 +8,39 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "quiz_details")
 data class QuizDetails(
-    val avgResult: Double,
-    val buttonStart: String,
-    val canonical: String,
-    val categories: List<Category>,
+    val avgResult: Double?,
+    val buttonStart: String?,
+    val canonical: String?,
+    val categories: List<Category>?,
     @Embedded(prefix = "categoryX_")
-    val category: CategoryX,
+    val category: CategoryX?,
     @Embedded(prefix = "celebrity_")
-    val celebrity: Celebrity,
-    val cityAvg: Double,
-    val cityCount: Double,
-    val cityTime: String,
-    val content: String,
-    val created: Int,
-    val createdAt: String,
+    val celebrity: Celebrity?,
+    val cityAvg: Double?,
+    val cityCount: Double?,
+    val cityTime: String?,
+    val content: String?,
+    val created: Int?,
+    val createdAt: String?,
     @PrimaryKey
     val id: Long,
-    val isBattle: Boolean,
-    val latestResults: List<LatestResult>,
+    val isBattle: Boolean?,
+    val latestResults: List<LatestResult>?,
     @Embedded(prefix = "mainPhoto_")
-    val mainPhoto: MainPhoto,
+    val mainPhoto: MainPhoto?,
     @SerializedName("opinions_enabled")
-    val opinionsEnabled: Boolean,
-    val publishedAt: String,
-    val questions: List<Question>,
-    val rates: List<Rate>,
-    val resultCount: Int,
-    val scripts: String,
-    val shareTitle: String,
-    val sponsored: Boolean,
+    val opinionsEnabled: Boolean?,
+    val publishedAt: String?,
+    val questions: List<Question>?,
+    val rates: List<Rate>?,
+    val resultCount: Int?,
+    val scripts: String?,
+    val shareTitle: String?,
+    val sponsored: Boolean?,
     @Embedded(prefix = "sponsoredResults_")
-    val sponsoredResults: SponsoredResults,
-    val tags: List<Tag>,
-    val title: String,
-    val type: String,
-    val userBattleDone: Boolean
+    val sponsoredResults: SponsoredResults?,
+    val tags: List<Tag>?,
+    val title: String?,
+    val type: String?,
+    val userBattleDone: Boolean?
 )
