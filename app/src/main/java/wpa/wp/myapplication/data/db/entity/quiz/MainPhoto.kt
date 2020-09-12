@@ -7,7 +7,7 @@ data class MainPhoto(
     val author: String,
     val height: Int,
     @SerializedName("media_id")
-    val mediaId: Any,
+    val mediaId: Long,
     val source: String,
     val title: String,
     val url: String,

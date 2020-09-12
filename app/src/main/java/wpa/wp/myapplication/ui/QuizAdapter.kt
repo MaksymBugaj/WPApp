@@ -16,6 +16,7 @@ import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.quiz.Category
 import wpa.wp.myapplication.data.db.entity.quiz.CategoryX
 import wpa.wp.myapplication.data.db.entity.quiz.Item
+import wpa.wp.myapplication.util.split
 
 
 class QuizAdapter(
@@ -26,6 +27,9 @@ class QuizAdapter(
     private var items: List<Item> = emptyList()
     private var categories: List<CategoryX> = emptyList()
     private lateinit var listener:OnQuizItemClickListener
+
+    private val isCategoryTrue = 1
+    private val isCategoryFalse = 0
 
 
    /* override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,7 +52,7 @@ class QuizAdapter(
                     LayoutInflater.from(parent.context).inflate(R.layout.category_item, parent, false)
                 CategoryViewHolder(layout,listener)
             }
-            false -> {
+            else -> {
                 val layout =
                     LayoutInflater.from(parent.context).inflate(R.layout.quiz_item, parent, false)
                 QuizViewHolder(layout,listener)
@@ -57,12 +61,19 @@ class QuizAdapter(
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return when(isCategory){
+            true -> categories.size
+            else -> items.size
+        }
     }
 
-    /*override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    }*/
+//    override fun getItemViewType(position: Int): Int {
+//        return when (isCategory){
+//            true -> isCategoryTrue
+//            else -> isCategoryFalse
+//        }
+//    }
+
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(isCategory){
@@ -91,7 +102,7 @@ class QuizAdapter(
         fun onItemClick(position: Int)
     }
 
-    inner class CategoryViewHolder(
+    internal class CategoryViewHolder(
         itemView: View,
         private val listenerItem: OnQuizItemClickListener
     ): RecyclerView.ViewHolder(itemView){
@@ -115,17 +126,6 @@ class QuizAdapter(
                 .into(numberItemImageView)
 
             split(itme.mainPhoto.url)*/
-        }
-
-        private fun split(url: String): String{
-            val separated: List<String> = url.split("://")
-            separated[0] // this will contain "Fruit"
-            separated[1] // this will contain " they taste good"
-            val urlCorrectBeginning = "https://i.wpimg.pl/300x/"
-
-            Timber.tag("NOPE").d("urlki: ${separated[1]} : ${urlCorrectBeginning.plus(separated[1])}")
-
-            return urlCorrectBeginning.plus(separated[1])
         }
 
     }
@@ -153,10 +153,10 @@ class QuizAdapter(
                 .load(split(itme.mainPhoto.url))
                 .into(numberItemImageView)
 
-            split(itme.mainPhoto.url)
+
         }
 
-        private fun split(url: String): String{
+        /*private fun split(url: String): String{
             val separated: List<String> = url.split("://")
             separated[0] // this will contain "Fruit"
             separated[1] // this will contain " they taste good"
@@ -165,7 +165,7 @@ class QuizAdapter(
             Timber.tag("NOPE").d("urlki: ${separated[1]} : ${urlCorrectBeginning.plus(separated[1])}")
 
             return urlCorrectBeginning.plus(separated[1])
-        }
+        }*/
 
     }
 

@@ -10,7 +10,7 @@ class QuizzesListViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ) : ViewModel() {
 
-//    fun getSpecificItems(category: String): Single<List<Item>>{
-//        return databaseRepository.getItemsByCategories(category)
-//    }
+    fun getSpecificItems(category: String): Single<List<Item>>{
+        return databaseRepository.getItemsByCategories(category)
+    }
 }

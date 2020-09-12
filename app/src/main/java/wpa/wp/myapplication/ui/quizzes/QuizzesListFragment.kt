@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -20,7 +22,7 @@ import wpa.wp.myapplication.ui.MainActivity
 import wpa.wp.myapplication.ui.QuizAdapter
 import javax.inject.Inject
 
-class QuizzesListFragment : Fragment() {
+class QuizzesListFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -64,9 +66,9 @@ class QuizzesListFragment : Fragment() {
         adapter.initListener(object : QuizAdapter.OnQuizItemClickListener{
             override fun onItemClick(position: Int) {
                 Timber.tag("NOPE").d("on click ${quizList[position]}")
-                //quizViewModel.selectedQuiz.onNext(quizList[position])
-//                val action = QuizzesListFragmentDirections.actionQuizesListFragmentToQuizFragment(quizList[position].id)
-//                findNavController().navigate(action)
+                quizViewModel.selectedQuiz.onNext(quizList[position])
+                val action = QuizzesListFragmentDirections.actionQuizzesListFragmentToQuizFragment(quizList[position].id)
+                findNavController().navigate(action)
 
             }
         })
@@ -76,14 +78,15 @@ class QuizzesListFragment : Fragment() {
     private fun getArgs(){
         val args = arguments?.let { QuizzesListFragmentArgs.fromBundle(it) }
         val category = args?.category
-//        category?.let { quizzesViewModel.getSpecificItems(category).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { list, throwable ->
-//            list?.let {
-//                initRecyclerWithItems(it)
-//            }
-//            throwable?.let {
-//
-//            }
-//        } }
+        category?.let { quizzesViewModel.getSpecificItems(category).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { list, throwable ->
+            list?.let {
+                initRecyclerWithItems(it)
+                quizList.addAll(it)
+            }
+            throwable?.let {
+
+            }
+        } }
     }
 
     private fun initRecyclerWithItems(items: List<Item>){

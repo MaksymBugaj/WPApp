@@ -4,14 +4,13 @@ package wpa.wp.myapplication.data.db.entity.quiz
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.google.gson.annotations.SerializedName
-import wpa.wp.myapplication.data.db.Converters
 
-
+@Entity(
+    tableName = "item_table"
+)
 data class Item(
     val buttonStart: String,
-    val categories: List<Category>?,
+    val categories: List<Category>,
     @Embedded(prefix = "categoryX_")
     val category: CategoryX,
     val content: String,

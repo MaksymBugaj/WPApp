@@ -16,9 +16,7 @@ import timber.log.Timber
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.quiz.CategoryX
 import wpa.wp.myapplication.data.db.entity.quiz.Item
-import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 import wpa.wp.myapplication.di.ViewModelProviderFactory
-import wpa.wp.myapplication.ui.MainActivity
 import wpa.wp.myapplication.ui.QuizAdapter
 import javax.inject.Inject
 
@@ -55,7 +53,7 @@ class CategoriesListFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //categoriesListViewModel.dupa()
+        categoriesListViewModel.getCategories()
 
         compositeDisposable.add(
             categoriesListViewModel.data.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -65,10 +63,10 @@ class CategoriesListFragment : DaggerFragment() {
         )
     }
 
-    private fun showQuizzesList(quiz: Quiz){
+    private fun showQuizzesList(quiz: List<Item>){
 
         val items = mutableListOf<Item>()
-        for(item in quiz.items){
+        for(item in quiz){
 //            Timber.tag("NOPE").d("categoryXXX ${item.mainPhoto.url}")
 //            Timber.tag("NOPE").d("categoryXXX ${item.id}")
 

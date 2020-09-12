@@ -1,6 +1,7 @@
 package wpa.wp.myapplication.data.repository
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,21 +20,21 @@ class DatabaseRepositoryImpl(
     private val compositeDisposable = CompositeDisposable()
 
     private fun insertQuiz(quiz: Quiz) {
-        /*compositeDisposable.add(
+        compositeDisposable.add(
             Completable.fromAction {
                 quizDao.insertQuiz(quiz)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
                 Timber.tag("NOPE").d("quizzes in in database")
             }
-        )*/
+        )
 
-        /*compositeDisposable.add(
+        compositeDisposable.add(
             Completable.fromAction {
                 for (item in quiz.items) quizDao.insertItem(item)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
                 Timber.tag("NOPE").d("item in database")
             }
-        )*/
+        )
     }
 
     private fun insertQuizDetails(quizDetails: QuizDetails){
@@ -41,7 +42,7 @@ class DatabaseRepositoryImpl(
             Completable.fromAction {
                 quizDao.insertQuizDetails(quizDetails)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
-                Timber.tag("NOPE").d("quizzes in in database")
+                Timber.tag("NOPE").d("quizzes details in in database")
             }
         )
     }
@@ -70,15 +71,19 @@ class DatabaseRepositoryImpl(
         )
     }
 
-    override fun getQuizList(): Single<Quiz> {
-        return quizDao.getQuiz()
+    override fun getQuizList(): Flowable<List<Item>> {
+        return quizDao.getQuizItems()
     }
 
     override fun getQuizDetailsList(): Single<QuizDetails> {
         return quizDao.getQuizDetails()
     }
 
-    /*override fun getItemsByCategories(category: String): Single<List<Item>> {
+    override fun getItemsByCategories(category: String): Single<List<Item>> {
         return quizDao.getSpecificQuizCategories(category)
-    }*/
+    }
+
+    override fun getQuizDetailsTemp(id: Long): Flowable<QuizDetails> {
+        return quizDao.getQuizDetailsTemp(id)
+    }
 }

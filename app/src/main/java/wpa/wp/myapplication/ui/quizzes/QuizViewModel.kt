@@ -15,7 +15,6 @@ import javax.inject.Inject
 
 class QuizViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository
-
 ) : ViewModel() {
 
     val selectedQuiz = PublishSubject.create<Item>()
@@ -28,22 +27,30 @@ class QuizViewModel @Inject constructor(
         Timber.tag("NOPE").d("Is it static?")
     }
 
-    fun getQuizDetails(id: Long){
+    fun downloadQuizDetails(id: Long){
         databaseRepository.getQuizDetails(id)
         compositeDisposable.add(
         databaseRepository.getQuizDetailsList().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { quizDetails, throwable ->
             quizDetails?.let {
                 Timber.tag("NOPE").d("we have them #QUIZVIEWMODEL")
-                _quizDetails.postValue(it)
+               loadQuizDetails(id)
             }
             throwable?.let {
                 Timber.tag("NOPE").d("Empty!!! ${throwable.message}")
             }
         }
         )
-
-
     }
+
+    private fun loadQuizDetails(id: Long){
+        compositeDisposable.add(
+        databaseRepository.getQuizDetailsTemp(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
+            Timber.tag("NOPE").d("any? $it")
+            _quizDetails.postValue(it)
+        }
+        )
+    }
+
 
     override fun onCleared() {
         super.onCleared()
