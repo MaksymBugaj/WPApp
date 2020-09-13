@@ -75,8 +75,8 @@ class DatabaseRepositoryImpl(
         return quizDao.getQuizItems()
     }
 
-    override fun getQuizDetailsList(): Single<QuizDetails> {
-        return quizDao.getQuizDetails()
+    override fun getFinishedQuizDetailsList(): Flowable<List<QuizDetails>> {
+        return quizDao.getQuizDetailsFinished()
     }
 
     override fun getItemsByCategories(category: String): Single<List<Item>> {
@@ -85,5 +85,9 @@ class DatabaseRepositoryImpl(
 
     override fun getQuizDetailsTemp(id: Long): Flowable<QuizDetails> {
         return quizDao.getQuizDetailsTemp(id)
+    }
+
+    override fun insertAnswers(quizDetails: QuizDetails) {
+        quizDao.insertQuizDetails(quizDetails)
     }
 }

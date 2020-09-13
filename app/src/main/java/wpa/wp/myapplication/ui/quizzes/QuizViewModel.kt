@@ -3,6 +3,7 @@ package wpa.wp.myapplication.ui.quizzes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -23,23 +24,36 @@ class QuizViewModel @Inject constructor(
     val quizDetails: LiveData<QuizDetails> = _quizDetails
 
     private val compositeDisposable = CompositeDisposable()
-    init {
-        Timber.tag("NOPE").d("Is it static?")
+
+    fun insertAnsweredQuiz(quizDetails: QuizDetails){
+        compositeDisposable.add(
+        Completable.fromAction {
+            databaseRepository.insertAnswers(quizDetails)
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
+            Timber.tag("NOPE").d("inserted answesr")
+        }
+        )
     }
 
     fun downloadQuizDetails(id: Long){
         databaseRepository.getQuizDetails(id)
         compositeDisposable.add(
+            databaseRepository.getQuizDetailsTemp(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
+                Timber.tag("NOPE").d("any? $it")
+                _quizDetails.postValue(it)
+            }
+        )
+        /*compositeDisposable.add(
         databaseRepository.getQuizDetailsList().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { quizDetails, throwable ->
             quizDetails?.let {
-                Timber.tag("NOPE").d("we have them #QUIZVIEWMODEL")
+                Timber.tag("NOPE").d("we have them #QUIZVIEWMODEL ${it.id}")
                loadQuizDetails(id)
             }
             throwable?.let {
-                Timber.tag("NOPE").d("Empty!!! ${throwable.message}")
+                Timber.tag("NOPE").d("Empty!!!  ${throwable.message}")
             }
         }
-        )
+        )*/
     }
 
     private fun loadQuizDetails(id: Long){

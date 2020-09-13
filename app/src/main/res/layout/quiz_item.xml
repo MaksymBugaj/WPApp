@@ -6,7 +6,6 @@
     <data>
 
 
-
     </data>
 
     <!--todo fix it and rebuild-->
@@ -34,108 +33,111 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
                 android:background="@drawable/abc_vector_test"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@id/quizItem_itemName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tempHolder"/>
-
-
-            <LinearLayout
-                android:id="@+id/tempHolder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/quizItem_check"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quizItem_topImage">
+                app:layout_constraintTop_toTopOf="parent" />
 
-
-                <TextView
-                    android:id="@+id/quizItem_itemName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    android:textSize="22sp"
-                    tools:text="title"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/quizItemLayout_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="5dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/quizItem_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="@id/quizItem_description"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Some comment"/>
-
-
-                    <TextView
-                        android:id="@+id/quizItemLayout_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="@id/quizItemLayout_price"
-                        app:layout_constraintTop_toBottomOf="@id/quizItemLayout_price" />
-
-                    <TextView
-                        android:id="@+id/quizItem_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginStart="10dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toEndOf="@id/quizItemLayout_description"
-                        app:layout_constraintTop_toBottomOf="@id/quizItem_price"
-                        tools:text="Some comment" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-
-
-            <CheckBox
-                android:id="@+id/quizItem_check"
-                style="@style/ButtonStyle"
+            <TextView
+                android:id="@+id/quizItem_unfinished"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@string/unfinished"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/quizItem_topImage"
+                app:layout_constraintEnd_toEndOf="@id/quizItem_topImage"
+                app:layout_constraintStart_toStartOf="@id/quizItem_topImage"
+                app:layout_constraintTop_toTopOf="@id/quizItem_topImage" />
+
+
+            <TextView
+                android:id="@+id/quizItem_itemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_regular"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="24sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
+                app:fontFamily="@font/roboto_regular"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quizItem_topImage" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/quizItem_topImage"
+                tools:text="title" />
+
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/quizItem_previousAttempGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="quizItem_dateAttempted,quizItem_previousAttemptScore,quizItemLayout_previousAttemptScore,quizItemLayout_dateAttempted" />
+
+            <TextView
+                android:id="@+id/quizItemLayout_previousAttemptScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/previousAttemptScore"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/quizItem_itemName" />
+
+            <TextView
+                android:id="@+id/quizItem_previousAttemptScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/quizItemLayout_previousAttemptScore"
+                app:layout_constraintStart_toEndOf="@id/quizItemLayout_previousAttemptScore"
+                app:layout_constraintTop_toTopOf="@id/quizItemLayout_previousAttemptScore"
+                tools:text="Some comment" />
+
+
+            <TextView
+                android:id="@+id/quizItemLayout_dateAttempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/previousAttemptDate"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/quizItemLayout_previousAttemptScore"
+                app:layout_constraintTop_toBottomOf="@id/quizItemLayout_previousAttemptScore" />
+
+            <TextView
+                android:id="@+id/quizItem_dateAttempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/quizItemLayout_dateAttempted"
+                app:layout_constraintStart_toEndOf="@id/quizItemLayout_dateAttempted"
+                app:layout_constraintTop_toTopOf="@id/quizItemLayout_dateAttempted"
+                tools:text="Some comment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

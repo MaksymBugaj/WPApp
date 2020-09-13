@@ -13,7 +13,7 @@ import wpa.wp.myapplication.data.db.entity.quiz.Quiz
     QuizDetails::class,
     Item::class
     ],
-    version = 1
+    version = 3
 )
 @TypeConverters(QuizConverters::class, QuizDetailsConverters::class)
 abstract class WPDatabase: RoomDatabase() {

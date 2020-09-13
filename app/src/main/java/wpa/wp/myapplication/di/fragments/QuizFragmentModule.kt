@@ -19,7 +19,6 @@ abstract class QuizFragmentModule {
 
     @Binds
     @IntoMap
-    @Singleton
     @ViewModelKey(QuizViewModel::class)
     abstract fun bindQuizViewModel(quizViewModel: QuizViewModel) : ViewModel
 }

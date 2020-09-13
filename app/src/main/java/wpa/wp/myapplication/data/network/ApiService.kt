@@ -1,5 +1,7 @@
 package wpa.wp.myapplication.data.network
 
+import com.google.gson.GsonBuilder
+import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -10,8 +12,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import timber.log.Timber
+import wpa.wp.myapplication.data.db.NullStringToEmptyAdapterFactory
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
+
 
 interface ApiService {
 
@@ -23,6 +27,11 @@ interface ApiService {
     fun getSpecificQuiz(
         @Path("id_quizu") id: Long
     ): Single<QuizDetails>
+
+    @GET("quiz/{id_quizu}/0")
+    fun getSpecificQuiz2(
+        @Path("id_quizu") id: Long
+    ): Flowable<QuizDetails>
 
 
     companion object{
@@ -56,11 +65,15 @@ interface ApiService {
                 .addInterceptor(logging)
                 .build()
 
+            val gson =
+                GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory<Any?>())
+                    .create()
+
             return Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl("http://quiz.o2.pl/api/v1/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(ApiService::class.java)
         }

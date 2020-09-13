@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.category_item.view.*
 import kotlinx.android.synthetic.main.quiz_item.view.*
-import timber.log.Timber
 import wpa.wp.myapplication.R
-import wpa.wp.myapplication.data.db.entity.quiz.Category
+import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.CategoryX
 import wpa.wp.myapplication.data.db.entity.quiz.Item
 import wpa.wp.myapplication.util.split
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class QuizAdapter(
@@ -25,43 +26,45 @@ class QuizAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<Item> = emptyList()
+    private var itemsFinished: List<QuizDetails> = emptyList()
     private var categories: List<CategoryX> = emptyList()
-    private lateinit var listener:OnQuizItemClickListener
+    private lateinit var listener: OnQuizItemClickListener
 
     private val isCategoryTrue = 1
     private val isCategoryFalse = 0
 
 
-   /* override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val viewHolderBinding = QuizItemBinding.inflate(inflater, parent, false)
-        return ViewHolder(
-            binding = viewHolderBinding,
-            lifecycleOwner = lifecycleOwner,
-            listenerItem = onQuizClickListener
-        )
-    }*/
+    /* override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+         val inflater = LayoutInflater.from(parent.context)
+         val viewHolderBinding = QuizItemBinding.inflate(inflater, parent, false)
+         return ViewHolder(
+             binding = viewHolderBinding,
+             lifecycleOwner = lifecycleOwner,
+             listenerItem = onQuizClickListener
+         )
+     }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         /*val layout =
             LayoutInflater.from(parent.context).inflate(R.layout.category_item, parent, false)
         return ViewHolder(layout, listenerItem = listener)*/
-        return when(isCategory){
+        return when (isCategory) {
             true -> {
                 val layout =
-                    LayoutInflater.from(parent.context).inflate(R.layout.category_item, parent, false)
-                CategoryViewHolder(layout,listener)
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.category_item, parent, false)
+                CategoryViewHolder(layout, listener)
             }
             else -> {
                 val layout =
                     LayoutInflater.from(parent.context).inflate(R.layout.quiz_item, parent, false)
-                QuizViewHolder(layout,listener)
+                QuizViewHolder(layout, listener)
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return when(isCategory){
+        return when (isCategory) {
             true -> categories.size
             else -> items.size
         }
@@ -76,23 +79,39 @@ class QuizAdapter(
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(isCategory){
-            true -> {(holder as CategoryViewHolder).bind(categories[position])}
-            false -> {(holder as QuizViewHolder).bind(items[position])}
+        when (isCategory) {
+            true -> {
+                (holder as CategoryViewHolder).bind(categories[position])
+            }
+            false -> {
+                if (itemsFinished.size != 0) {
+                    (holder as QuizViewHolder).bind(
+                        items[position],
+                        getProperQuizDetails(items[position].id, itemsFinished)
+                    )
+                } else (holder as QuizViewHolder).bind(items[position], null)
+            }
 
         }
+    }
+
+    fun getProperQuizDetails(id: Long, list: List<QuizDetails>): QuizDetails? {
+        return list.firstOrNull() { it.id == id }
     }
 
     fun initListener(listener: OnQuizItemClickListener) {
         this.listener = listener
     }
 
-    fun setItems(newList: List<Item>){
-        items = newList
+    fun setItems(itemsList: List<Item>, finishedList: List<QuizDetails>?) {
+        items = itemsList
+        finishedList?.let {
+            itemsFinished = it
+        }
         notifyDataSetChanged()
     }
 
-    fun setCategories(newList: List<CategoryX>){
+    fun setCategories(newList: List<CategoryX>) {
         categories = newList
         notifyDataSetChanged()
 
@@ -105,10 +124,9 @@ class QuizAdapter(
     internal class CategoryViewHolder(
         itemView: View,
         private val listenerItem: OnQuizItemClickListener
-    ): RecyclerView.ViewHolder(itemView){
+    ) : RecyclerView.ViewHolder(itemView) {
 
         private val numberItemName: TextView = itemView.categoryItem_itemName
-        private val numberItemImageView: ImageView = itemView.categoryItem_topImage
         private val rootLayout: CardView = itemView.categoryItem_root
 
 
@@ -119,13 +137,8 @@ class QuizAdapter(
             }
         }
 
-        fun bind(itme: CategoryX){
-            numberItemName.text = itme.name
-            /*Picasso.with(context)
-                .load(split(itme.mainPhoto.url))
-                .into(numberItemImageView)
-
-            split(itme.mainPhoto.url)*/
+        fun bind(category: CategoryX) {
+            numberItemName.text = category.name
         }
 
     }
@@ -133,11 +146,15 @@ class QuizAdapter(
     inner class QuizViewHolder(
         itemView: View,
         private val listenerItem: OnQuizItemClickListener
-    ): RecyclerView.ViewHolder(itemView){
+    ) : RecyclerView.ViewHolder(itemView) {
 
         private val numberItemName: TextView = itemView.quizItem_itemName
         private val numberItemImageView: ImageView = itemView.quizItem_topImage
         private val rootLayout: CardView = itemView.quizItem_root
+        private val groupFinished = itemView.quizItem_previousAttempGroup
+        private val dateAttempted = itemView.quizItem_dateAttempted
+        private val previousScore = itemView.quizItem_previousAttemptScore
+        private val unfinished = itemView.quizItem_unfinished
 
 
         init {
@@ -147,29 +164,31 @@ class QuizAdapter(
             }
         }
 
-        fun bind(itme: Item){
-            numberItemName.text = itme.title
+        fun bind(item: Item, quizDetails: QuizDetails?) {
+            numberItemName.text = item.title
             Picasso.with(context)
-                .load(split(itme.mainPhoto.url))
+                .load(split(item.mainPhoto.url))
                 .into(numberItemImageView)
+
+            quizDetails?.let {
+                groupFinished.visibility = View.VISIBLE
+                dateAttempted.text = convertLongToTime(it.finishedDate!!)
+                previousScore.text = it.previousScore.toString()
+                if(it.unfinished!!) {
+                    unfinished.visibility = View.VISIBLE
+                    previousScore.visibility = View.INVISIBLE
+                }
+            }
 
 
         }
 
-        /*private fun split(url: String): String{
-            val separated: List<String> = url.split("://")
-            separated[0] // this will contain "Fruit"
-            separated[1] // this will contain " they taste good"
-            val urlCorrectBeginning = "https://i.wpimg.pl/300x/"
-
-            Timber.tag("NOPE").d("urlki: ${separated[1]} : ${urlCorrectBeginning.plus(separated[1])}")
-
-            return urlCorrectBeginning.plus(separated[1])
-        }*/
-
+        fun convertLongToTime(time: Long): String {
+            val date = Date(time)
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            return format.format(date)
+        }
     }
-
-
 
     /*inner class ViewHolder(
         private val binding: QuizItemBinding,

@@ -63,9 +63,18 @@ class QuizApiRepositoryImpl(
 
                 override fun onError(e: Throwable) {
                     Timber.tag("NOPE")
-                        .d("Error during fetch QUIZ API ${e.message} : ${e.stackTrace} : ${e.localizedMessage}")
+                        .d("Error during fetch QUIZ API ${e.message} : ${e.stackTrace} : ${e.localizedMessage} ${e.cause}")
                 }
 
             })
+        /*compositeDisposable.add(
+        apiService.getSpecificQuiz2(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                _quizDetailsDownloaded.onNext(it)
+                Timber.tag("NOPE").d("we have data Quiz ${it}")
+            }
+        )*/
     }
 }

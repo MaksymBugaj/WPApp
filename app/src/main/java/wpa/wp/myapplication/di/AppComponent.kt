@@ -8,6 +8,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import wpa.wp.myapplication.WPApp
 import wpa.wp.myapplication.di.fragments.QuizFragmentModule
 import wpa.wp.myapplication.di.fragments.CategoriesListFragmentModule
+import wpa.wp.myapplication.di.fragments.QuizResultsFragmentModule
 import wpa.wp.myapplication.di.fragments.QuizzesListFragmentModule
 import javax.inject.Singleton
 
@@ -21,7 +22,8 @@ import javax.inject.Singleton
         NetworkModule::class,
         CategoriesListFragmentModule::class,
         QuizFragmentModule::class,
-        QuizzesListFragmentModule::class
+        QuizzesListFragmentModule::class,
+        QuizResultsFragmentModule::class
     ]
 )
 interface AppComponent : AndroidInjector<WPApp> {

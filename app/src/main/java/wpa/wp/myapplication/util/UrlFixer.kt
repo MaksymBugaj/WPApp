@@ -8,7 +8,7 @@ fun split(url: String): String{
     separated[1] // this will contain " they taste good"
     val urlCorrectBeginning = "https://i.wpimg.pl/500x/"
 
-    Timber.tag("NOPE").d("urlki: ${separated[1]} : ${urlCorrectBeginning.plus(separated[1])}")
+//    Timber.tag("NOPE").d("urlki: ${separated[1]} : ${urlCorrectBeginning.plus(separated[1])}")
 
     return urlCorrectBeginning.plus(separated[1])
 }

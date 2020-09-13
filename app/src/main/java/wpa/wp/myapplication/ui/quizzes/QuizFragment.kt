@@ -9,14 +9,14 @@ import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -29,6 +29,8 @@ import wpa.wp.myapplication.data.db.entity.details.Question
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.di.ViewModelProviderFactory
 import wpa.wp.myapplication.util.split
+import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class QuizFragment : DaggerFragment() {
@@ -44,6 +46,11 @@ class QuizFragment : DaggerFragment() {
     private lateinit var demoCollectionAdapter: DemoCollectionAdapter
     private lateinit var viewPager: ViewPager2
     private lateinit var listener: ProgressListener
+    private val listOfAnswers = mutableMapOf<String, String>()
+    private var czujka6 = true
+
+    //holding quiz to save in db in case of leaving test
+    private lateinit var quizDetails: QuizDetails
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,92 +59,161 @@ class QuizFragment : DaggerFragment() {
         return inflater.inflate(R.layout.quiz_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         getArgs()
 
         compositeDisposable.add(
-        viewModel.selectedQuiz.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
-            Timber.tag("NOPE").d("he?")
-            it?.let {
-                Timber.tag("NOPE").d("passed quiz ${it.id}")
-                viewModel.downloadQuizDetails(it.id)
-            }
-        }
+            viewModel.selectedQuiz.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe {
+                    Timber.tag("NOPE").d("he?")
+                    it?.let {
+                        Timber.tag("NOPE").d("passed quiz ${it.id}")
+                        viewModel.downloadQuizDetails(it.id)
+                    }
+                }
         )
 
         viewModel.quizDetails.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Timber.tag("NOPE").d("quizDetails questions ${it.questions!!.size}")
-                createQuiz(it)
+                if(czujka6) {
+                    createQuiz(it)
+                    czujka6 = false
+                }
             }
         })
-
-
-
     }
 
-    private fun getArgs(){
+    override fun onResume() {
+        super.onResume()
+        Timber.tag("NOPE").d("on Reesume")
+    }
+
+    private fun getArgs() {
         val args = arguments?.let { QuizFragmentArgs.fromBundle(it) }
         val id = args?.id
-        id?.let { Timber.tag("NOPE").d("passed quiz getArgs ${id}")
-            viewModel.downloadQuizDetails(id) }
+        id?.let {
+            Timber.tag("NOPE").d("passed quiz getArgs ${id}")
+            viewModel.downloadQuizDetails(id)
+        }
     }
 
-    private fun createQuiz(quizDetails: QuizDetails){
+    private fun createQuiz(quizDetails: QuizDetails) {
         //todo change the name?
+        this.quizDetails = quizDetails
         val quizzesSize = quizDetails.questions?.size!!
 
-        initProgressListener(object : ProgressListener{
-            override fun onChange(position: Int) {
-                val progress = (position + 1).toDouble() * 100 / (quizzesSize.toDouble() + 1.0)
+        initProgressListener(object : ProgressListener {
+            override fun onAnswerSelected(answer: Pair<String, String>) {
+                listOfAnswers[answer.first] = answer.second
+                Timber.tag("NOPE")
+                    .d("Answer received ${answer.first} s: ${answer.second} ${listOfAnswers.size}")
+            }
+
+            override fun buttonEndListener() {
+                checkAnswers(quizDetails)
+            }
+        })
+        val previousAnswers = quizDetails.userAnswers
+        if(quizDetails.unfinished == true) demoCollectionAdapter = DemoCollectionAdapter(this, quizDetails, listener, previousAnswers) else  demoCollectionAdapter = DemoCollectionAdapter(this, quizDetails, listener, null)
+
+
+        viewPager = quizFragment_questionsViewPager
+        viewPager.adapter = demoCollectionAdapter
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                val progress = (position + 1).toDouble() * 100 / (quizzesSize.toDouble())
                 Timber.tag("NOPE").d("progress $progress")
-                if(progress.toInt() > 100) quizFragment_progressIndicator.progress = 99
+                if (progress.toInt() > 100) quizFragment_progressIndicator.progress = 99
                 quizFragment_progressIndicator.progress = progress.toInt()
                 quizFragment_progressIndicator.show()
             }
         })
 
-        demoCollectionAdapter = DemoCollectionAdapter(this, quizDetails, listener)
-        viewPager = quizFragment_questionsViewPager
-        viewPager.adapter = demoCollectionAdapter
-
-
-
-
-
-        val tab_layout = view?.findViewById<TabLayout>(R.id.quizFragment_questionNumber)
-        TabLayoutMediator(tab_layout!!, viewPager) { tab, position ->
+        val tabLayout = view?.findViewById<TabLayout>(R.id.quizFragment_questionNumber)
+        TabLayoutMediator(tabLayout!!, viewPager) { tab, position ->
             tab.text = "Question ${position + 1}"
-
-
         }.attach()
     }
 
-    private fun initProgressListener(listener: ProgressListener){
+    private fun initProgressListener(listener: ProgressListener) {
         this.listener = listener
     }
 
+    private fun checkAnswers(quizDetails: QuizDetails) {
+        var countedCorrectAnswers = 0
+        val correctAnswer = mutableMapOf<String, Boolean>()
+        for (i in quizDetails.questions!!.indices) {
+            if(listOfAnswers.containsValue(quizDetails.questions[i].text!!)) {
+                val getAnswer = listOfAnswers.getValue(quizDetails.questions[i].text!!)
+                for (j in quizDetails.questions[i].answers?.indices!!) {
+                    if (getAnswer == quizDetails.questions[i].answers?.get(j)?.text!!) {
+                        quizDetails.questions[i].answers?.get(j)?.isCorrect?.let {
+                            if (quizDetails.questions[i].answers?.get(j)?.isCorrect!! == 1)
+                                correctAnswer[quizDetails.questions[i].text!!] = true
+                            countedCorrectAnswers += 1
+                        }
+                    }
+                }
+            }
+//             getAnswer == quizDetails.questions[i].answer
+
+//            Timber.tag("NOPE").d("Correct answer: ${quizDetails.questions[i].answer} my answer: $getAnswer")
+        }
+
+        val percent = (countedCorrectAnswers / quizDetails.questions.size) * 100
+        val map: Map<String, String> = listOfAnswers
+        val quizToInsert = quizDetails.copy(
+            userAnswers = map,
+            finishedDate = getFinishedDate(),
+            unfinished = false,
+            previousScore = percent
+        )
+        viewModel.insertAnsweredQuiz(quizToInsert)
+        saveQuizAndNavigateToResults(quizDetails)
+    }
+
+
+    private fun saveQuizAndNavigateToResults(quizDetails: QuizDetails) {
+        Timber.tag("NOPE").d("Finish!!! ${listOfAnswers.size}")
+        val action = QuizFragmentDirections.actionQuizFragmentToQuizResultsFragment(quizDetails.id)
+        findNavController().navigate(action)
+
+    }
+
+    private fun getFinishedDate(): Long {
+        val date = Date()
+        return date.time
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(::quizDetails.isInitialized) {
+            val quizToInsert = quizDetails.copy(
+                userAnswers = listOfAnswers,
+                finishedDate = getFinishedDate(),
+                unfinished = true
+            )
+            viewModel.insertAnsweredQuiz(quizToInsert)
+        }
+    }
 }
 
-interface ProgressListener{
-    fun onChange(position: Int)
-}
-interface Answers{
-    fun onFinish(list: List<Pair<Int,String>>)
+interface ProgressListener {
+    fun onAnswerSelected(answer: Pair<String, String>)
+    fun buttonEndListener()
 }
 
-enum class ANSWER_TYPE {
-    NO_ANSWER,WRONG_ANSWER,GOOD_ANSWER
-}
-
-class DemoCollectionAdapter(fragment: Fragment, private val quizDetails: QuizDetails, private val listener: ProgressListener) : FragmentStateAdapter(fragment) {
+//fixme to reconsider map and check
+class DemoCollectionAdapter(
+    fragment: Fragment,
+    private val quizDetails: QuizDetails,
+    private val listener: ProgressListener,
+    private val map: Map<String, String>?
+) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = quizDetails.questions?.size!!
 
@@ -147,18 +223,25 @@ class DemoCollectionAdapter(fragment: Fragment, private val quizDetails: QuizDet
             // Our object is just an integer :-P
             putInt(ARG_OBJECT, position + 1)
         }*/
-        listener.onChange(position)
-
-        return DemoObjectFragment(quizDetails.questions?.get(position)!!)
+        return if (position == itemCount - 1) DemoObjectFragment(
+            quizDetails.questions?.get(position)!!,
+            listener,
+            true,
+            map
+        )
+        else
+            DemoObjectFragment(quizDetails.questions?.get(position)!!, listener, false, map)
     }
-
 }
 
 
 // Instances of this class are fragments representing a single
 // object in our collection.
 class DemoObjectFragment(
-    private val question: Question
+    private val question: Question,
+    private val listener: ProgressListener,
+    private val showButton: Boolean = false,
+    private val map: Map<String, String>?
 ) : Fragment() {
 
     override fun onCreateView(
@@ -170,53 +253,48 @@ class DemoObjectFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            val textView: TextView = view.findViewById(android.R.id.text1)
-            textView.text = getInt(ARG_OBJECT).toString()
-        }*/
         val image = fragmentQuestion_image
         val fragmentQuestion = fragmentQuestion_question
         val answersLayout = fragmentQuestion_answersLayout
-
-
+        val finishButton = fragmentQuestion_buttonFinish
 
         Picasso.with(context)
-            .load(split(question.image.url))
+            .load(split(question.image?.url!!))
             .into(image)
 
         fragmentQuestion.text = question.text
 
         val radioGroup = RadioGroup(requireContext())
-        for(answer in question.answers) {
+        for (answer in question.answers!!) {
             val radioButton = RadioButton(requireContext())
             answer.text?.let {
                 radioButton.text = it
+
             }
-            Timber.tag("NOPE").d("Answer: image ${(answer.image.url)}")
-            /*answer.image?.let {
-                val downloadedImage = ImageView(requireContext())
-                Picasso.with(context)
-                    .load(split(it.url))
-                    .into(downloadedImage)
-
-                radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,downloadedImage,0)
-            }*/
-
             radioGroup.addView(radioButton)
+            if(!map.isNullOrEmpty()){
+                if(map.containsKey(question.text)){
+                    if(map.containsValue(radioButton.text.toString())) {
+                        radioButton.isChecked = true
+                        Timber.tag("NOPE").d("HE HEHEHEHEHE")
+                    }
+                }
+            }
         }
         answersLayout.addView(radioGroup)
 
-        radioGroup.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener{
-            override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
-                val radioButton = view.findViewById(checkedId) as RadioButton
-                Timber.tag("NOPE").d("Answer: radioButton ${radioButton.text}")
+        radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            val radioButton = view.findViewById(checkedId) as RadioButton
+            Timber.tag("NOPE").d("Answer: radioButton ${radioButton.text}")
+            listener.onAnswerSelected(Pair(question.text!!, radioButton.text.toString()))
+        }
+        if (showButton) {
+            finishButton.visibility = View.VISIBLE
+            finishButton.setOnClickListener {
+                listener.buttonEndListener()
             }
-        })
+        }
 
-
-    }
-
-    private fun createAnswers(answers: List<Answer>){
 
     }
 }

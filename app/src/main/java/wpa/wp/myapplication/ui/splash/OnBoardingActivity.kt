@@ -55,7 +55,7 @@ class OnBoardingActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_on_boarding)
 
 
-        supportActionBar!!.hide()
+
 
         // ini views
 

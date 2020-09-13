@@ -2,4 +2,9 @@
     <string name="app_name">WPApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="finishQuiz">Finish Quiz</string>
+    <string name="quizzesNumber">Quizzes Number</string>
+    <string name="unfinished">Unfinished!!</string>
+    <string name="previousAttemptScore">Previous attempt score</string>
+    <string name="previousAttemptDate">Previous attempt date</string>
 </resources>

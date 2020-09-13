@@ -42,5 +42,10 @@ data class QuizDetails(
     val tags: List<Tag>?,
     val title: String?,
     val type: String?,
-    val userBattleDone: Boolean?
+    val userBattleDone: Boolean?,
+    val userAnswers: Map<String,String>?,
+    val finishedDate: Long?,
+    val unfinished: Boolean?,
+    val previousScore: Int?
+
 )

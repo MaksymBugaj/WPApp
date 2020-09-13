@@ -13,7 +13,7 @@ interface DatabaseRepository {
 
     fun getQuizDetails(id: Long)
 
-    fun getQuizDetailsList(): Single<QuizDetails>
+    fun getFinishedQuizDetailsList(): Flowable<List<QuizDetails>>
 
     fun getQuizList(): Flowable<List<Item>>
 
@@ -21,4 +21,6 @@ interface DatabaseRepository {
 
 //    fixme temporary, to be replaced
     fun getQuizDetailsTemp(id: Long): Flowable<QuizDetails>
+
+    fun insertAnswers(quizDetails: QuizDetails)
 }

@@ -2,8 +2,15 @@ package wpa.wp.myapplication.data.db
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
+import com.google.gson.TypeAdapterFactory
 import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
 import wpa.wp.myapplication.data.db.entity.details.*
+import java.io.IOException
 
 
 class QuizDetailsConverters {
@@ -72,4 +79,52 @@ class QuizDetailsConverters {
         return Gson().fromJson(value, Array<SponsoredResults>::class.java).toList()
     }
 
+    @TypeConverter
+    fun fromString(value: String?): Map<String, String>? {
+        if (value == "null")
+            return emptyMap()
+        val mapType = object : TypeToken<Map<String, String>>() {
+
+        }.type
+        return Gson().fromJson(value, mapType)
+    }
+
+    @TypeConverter
+    fun fromStringMap(map: Map<String, String>?): String {
+        val gson = Gson()
+        return gson.toJson(map)
+    }
+
 }
+
+class NullStringToEmptyAdapterFactory<T> : TypeAdapterFactory {
+    override fun <T> create(gson: Gson, type: TypeToken<T>): TypeAdapter<T>? {
+        val rawType = type.rawType as Class<T>
+        return (if (rawType != String::class.java) {
+            null
+        } else StringNullAdapter() as TypeAdapter<T>)
+    }
+}
+
+class StringNullAdapter : TypeAdapter<String?>() {
+    @Throws(IOException::class)
+    override fun read(reader: JsonReader): String {
+        // TODO Auto-generated method stub
+        if (reader.peek() === JsonToken.NULL) {
+            reader.nextNull()
+            return ""
+        }
+        return reader.nextString()
+    }
+
+    @Throws(IOException::class)
+    override fun write(writer: JsonWriter, value: String?) {
+        // TODO Auto-generated method stub
+        if (value == null) {
+            writer.nullValue()
+            return
+        }
+        writer.value(value)
+    }
+}
+
