@@ -31,7 +31,7 @@ class QuizResultsFragment : DaggerFragment() {
         getArgs()
 
         quizResultsViewModel.quizDetails.observe(viewLifecycleOwner, Observer { quizDetails ->
-            quizDetails.finishedDate?.let {
+            quizDetails.previousScore?.let {
                 displayScore(quizDetails)
             }
         })

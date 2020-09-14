@@ -25,6 +25,7 @@ class CategoriesListViewModel @Inject constructor(
 
     init {
         Timber.tag("NOPE").d("init")
+        databaseRepository.getQuizzes()
 
     }
 

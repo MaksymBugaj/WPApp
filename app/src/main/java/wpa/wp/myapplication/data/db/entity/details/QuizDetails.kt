@@ -4,48 +4,49 @@ package wpa.wp.myapplication.data.db.entity.details
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "quiz_details")
 data class QuizDetails(
-    val avgResult: Double?,
-    val buttonStart: String?,
-    val canonical: String?,
-    val categories: List<Category>?,
+    @Expose( serialize = true, deserialize = true) val avgResult: Double?,
+    @Expose( serialize = true, deserialize = true) val buttonStart: String?,
+    @Expose( serialize = true, deserialize = true) val canonical: String?,
+    @Expose( serialize = true, deserialize = true) val categories: List<Category>?,
     @Embedded(prefix = "categoryX_")
-    val category: CategoryX?,
+    @Expose( serialize = true, deserialize = true) val category: CategoryX?,
     @Embedded(prefix = "celebrity_")
-    val celebrity: Celebrity?,
-    val cityAvg: Double?,
-    val cityCount: Double?,
-    val cityTime: String?,
-    val content: String?,
-    val created: Int?,
-    val createdAt: String?,
+    @Expose( serialize = true, deserialize = true) val celebrity: Celebrity?,
+    @Expose( serialize = true, deserialize = true) val cityAvg: Double? = null,
+    @Expose( serialize = true, deserialize = true) val cityCount: Double? = null,
+    @Expose( serialize = true, deserialize = true) val cityTime: String? = null,
+    @Expose( serialize = true, deserialize = true) val content: String?,
+    @Expose( serialize = true, deserialize = true) val created: Int?,
+    @Expose( serialize = true, deserialize = true) val createdAt: String?,
     @PrimaryKey
-    val id: Long,
-    val isBattle: Boolean?,
-    val latestResults: List<LatestResult>?,
+    @Expose( serialize = true, deserialize = true) val id: Long?,
+    @Expose( serialize = true, deserialize = true) val isBattle: Boolean?,
+    @Expose( serialize = true, deserialize = true) val latestResults: List<LatestResult>?,
     @Embedded(prefix = "mainPhoto_")
-    val mainPhoto: MainPhoto?,
+    @Expose( serialize = true, deserialize = true) val mainPhoto: MainPhoto?,
     @SerializedName("opinions_enabled")
-    val opinionsEnabled: Boolean?,
-    val publishedAt: String?,
-    val questions: List<Question>?,
-    val rates: List<Rate>?,
-    val resultCount: Int?,
-    val scripts: String?,
-    val shareTitle: String?,
-    val sponsored: Boolean?,
+    @Expose( serialize = true, deserialize = true) val opinionsEnabled: Boolean?,
+    @Expose( serialize = true, deserialize = true) val publishedAt: String?,
+    @Expose( serialize = true, deserialize = true) val questions: List<Question>?,
+    @Expose( serialize = true, deserialize = true) val rates: List<Rate>?,
+    @Expose( serialize = true, deserialize = true) val resultCount: Int?,
+    @Expose( serialize = true, deserialize = true)val scripts: String?,
+    @Expose( serialize = true, deserialize = true) val shareTitle: String?,
+    @Expose( serialize = true, deserialize = true)val sponsored: Boolean?,
     @Embedded(prefix = "sponsoredResults_")
-    val sponsoredResults: SponsoredResults?,
-    val tags: List<Tag>?,
-    val title: String?,
-    val type: String?,
-    val userBattleDone: Boolean?,
-    val userAnswers: Map<String,String>?,
-    val finishedDate: Long?,
-    val unfinished: Boolean?,
-    val previousScore: Int?
+    @Expose( serialize = true, deserialize = true)val sponsoredResults: SponsoredResults?,
+    @Expose( serialize = true, deserialize = true)val tags: List<Tag>?,
+    @Expose( serialize = true, deserialize = true)val title: String?,
+    @Expose( serialize = true, deserialize = true)val type: String?,
+    @Expose( serialize = true, deserialize = true)val userBattleDone: Boolean?,
+    @Expose( serialize = true, deserialize = true)val userAnswers: Map<String,String>?,
+    @Expose( serialize = true, deserialize = true) val finishedDate: Long?,
+    @Expose( serialize = true, deserialize = true)val unfinished: Boolean?,
+    @Expose( serialize = true, deserialize = true)val previousScore: Int?
 
 )

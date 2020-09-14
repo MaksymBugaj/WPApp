@@ -1,4 +1,4 @@
-package wpa.wp.myapplication.data.db
+package wpa.wp.myapplication.data.db.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

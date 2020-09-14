@@ -26,20 +26,24 @@ class QuizViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     fun insertAnsweredQuiz(quizDetails: QuizDetails){
-        compositeDisposable.add(
+
         Completable.fromAction {
             databaseRepository.insertAnswers(quizDetails)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
             Timber.tag("NOPE").d("inserted answesr")
         }
-        )
+
     }
 
     fun downloadQuizDetails(id: Long){
+
         databaseRepository.getQuizDetails(id)
         compositeDisposable.add(
             databaseRepository.getQuizDetailsTemp(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
                 Timber.tag("NOPE").d("any? $it")
+                if(it == null) {
+                    Timber.tag("NOPE").d("loading from net")
+                }
                 _quizDetails.postValue(it)
             }
         )
@@ -68,6 +72,7 @@ class QuizViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+        Timber.tag("NOPE").d("onCleared")
         compositeDisposable.clear()
     }
 }

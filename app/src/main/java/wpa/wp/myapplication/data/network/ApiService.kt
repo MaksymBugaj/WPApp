@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import timber.log.Timber
-import wpa.wp.myapplication.data.db.NullStringToEmptyAdapterFactory
+import wpa.wp.myapplication.data.db.converters.*
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 
@@ -66,7 +66,13 @@ interface ApiService {
                 .build()
 
             val gson =
-                GsonBuilder().registerTypeAdapterFactory(NullStringToEmptyAdapterFactory<Any?>())
+                GsonBuilder()
+                    .registerTypeAdapterFactory(NullStringToEmptyAdapterFactoryT<Any?>())
+                    .registerTypeAdapterFactory(NullIntToEmptyAdapterFactory<Any?>())
+                    .registerTypeAdapterFactory(NullLongToEmptyAdapterFactory<Any?>())
+                    .registerTypeAdapterFactory(NullDoubleToEmptyAdapterFactory<Any?>())
+                    .registerTypeAdapterFactory(NullBooleanToEmptyAdapterFactory<Any?>())
+
                     .create()
 
             return Retrofit.Builder()

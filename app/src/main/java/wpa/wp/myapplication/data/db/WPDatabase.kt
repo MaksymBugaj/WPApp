@@ -3,6 +3,8 @@ package wpa.wp.myapplication.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import wpa.wp.myapplication.data.db.converters.QuizConverters
+import wpa.wp.myapplication.data.db.converters.QuizDetailsConverters
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Item
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
@@ -13,7 +15,7 @@ import wpa.wp.myapplication.data.db.entity.quiz.Quiz
     QuizDetails::class,
     Item::class
     ],
-    version = 3
+    version = 4
 )
 @TypeConverters(QuizConverters::class, QuizDetailsConverters::class)
 abstract class WPDatabase: RoomDatabase() {

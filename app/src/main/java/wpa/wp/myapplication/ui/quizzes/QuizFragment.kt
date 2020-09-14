@@ -117,7 +117,11 @@ class QuizFragment : DaggerFragment() {
             }
         })
         val previousAnswers = quizDetails.userAnswers
-        if(quizDetails.unfinished == true) demoCollectionAdapter = DemoCollectionAdapter(this, quizDetails, listener, previousAnswers) else  demoCollectionAdapter = DemoCollectionAdapter(this, quizDetails, listener, null)
+         if(quizDetails.unfinished == true) {
+             Timber.tag("NOPE")
+                 .d("Unfinished!! ${previousAnswers?.size} ")
+             demoCollectionAdapter = DemoCollectionAdapter(this, quizDetails, listener, previousAnswers)
+         } else demoCollectionAdapter = DemoCollectionAdapter(this, quizDetails, listener, null)
 
 
         viewPager = quizFragment_questionsViewPager
@@ -179,7 +183,7 @@ class QuizFragment : DaggerFragment() {
 
     private fun saveQuizAndNavigateToResults(quizDetails: QuizDetails) {
         Timber.tag("NOPE").d("Finish!!! ${listOfAnswers.size}")
-        val action = QuizFragmentDirections.actionQuizFragmentToQuizResultsFragment(quizDetails.id)
+        val action = QuizFragmentDirections.actionQuizFragmentToQuizResultsFragment(quizDetails.id!!)
         findNavController().navigate(action)
 
     }
@@ -189,14 +193,16 @@ class QuizFragment : DaggerFragment() {
         return date.time
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         if(::quizDetails.isInitialized) {
             val quizToInsert = quizDetails.copy(
                 userAnswers = listOfAnswers,
                 finishedDate = getFinishedDate(),
                 unfinished = true
             )
+            Timber.tag("NOPE")
+                .d("onStop!! ")
             viewModel.insertAnsweredQuiz(quizToInsert)
         }
     }
@@ -273,6 +279,7 @@ class DemoObjectFragment(
             }
             radioGroup.addView(radioButton)
             if(!map.isNullOrEmpty()){
+                Timber.tag("NOPE").d("map isze: ${map.size}")
                 if(map.containsKey(question.text)){
                     if(map.containsValue(radioButton.text.toString())) {
                         radioButton.isChecked = true
