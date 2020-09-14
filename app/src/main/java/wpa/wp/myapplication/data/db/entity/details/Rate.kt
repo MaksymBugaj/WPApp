@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 
 data class Rate(
     val content: String?,
-    val from: Int?,
-    val to: Int?
+    val from: String?,
+    val to: String?
 )

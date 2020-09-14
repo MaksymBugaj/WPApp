@@ -58,7 +58,7 @@ class QuizResultsFragment : DaggerFragment() {
 
         var text: String = ""
         for (rate in quizDetails.rates!!){
-            if(rate.to!! > quizDetails.previousScore!! && rate.from!! <= quizDetails.previousScore) text = rate.content!!
+            if(rate.to?.toInt()!! > quizDetails.previousScore!! && rate.from!!.toInt()!! <= quizDetails.previousScore) text = rate.content!!
         }
         val percentText = "${quizDetails.previousScore} %"
         quizResults_score.text = percentText

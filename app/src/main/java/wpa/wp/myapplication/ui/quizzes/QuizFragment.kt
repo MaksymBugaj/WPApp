@@ -264,9 +264,11 @@ class DemoObjectFragment(
         val answersLayout = fragmentQuestion_answersLayout
         val finishButton = fragmentQuestion_buttonFinish
 
-        Picasso.with(context)
-            .load(split(question.image?.url!!))
-            .into(image)
+        if(question.image?.url!!.isNotEmpty()){
+            Picasso.with(context)
+                .load(split(question.image?.url!!))
+                .into(image)
+        }
 
         fragmentQuestion.text = question.text
 

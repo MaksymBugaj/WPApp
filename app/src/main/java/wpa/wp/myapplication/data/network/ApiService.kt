@@ -67,7 +67,6 @@ interface ApiService {
 
             val gson =
                 GsonBuilder()
-                    .registerTypeAdapterFactory(NullStringToEmptyAdapterFactoryT<Any?>())
                     .registerTypeAdapterFactory(NullIntToEmptyAdapterFactory<Any?>())
                     .registerTypeAdapterFactory(NullLongToEmptyAdapterFactory<Any?>())
                     .registerTypeAdapterFactory(NullDoubleToEmptyAdapterFactory<Any?>())

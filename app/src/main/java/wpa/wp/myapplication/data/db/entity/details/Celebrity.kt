@@ -13,5 +13,5 @@ data class Celebrity(
     val imageWidth: String?,
     val name: String?,
     val result: String?,
-    val show: Int?
+    val show: String?
 )
