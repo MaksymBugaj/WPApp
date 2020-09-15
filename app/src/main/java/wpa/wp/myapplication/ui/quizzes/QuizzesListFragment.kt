@@ -16,7 +16,9 @@ import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.quizes_list_fragment.*
 import kotlinx.android.synthetic.main.quizes_list_fragment.view.*
+import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_progress
 import timber.log.Timber
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
@@ -57,6 +59,9 @@ class QuizzesListFragment : DaggerFragment() {
         view.quizzesFragment_recycler.layoutManager = LinearLayoutManager(view.context)
         view.quizzesFragment_recycler.adapter = adapter
         initRecyclerListener()
+
+        quizzesFragment_progress.visibility = View.GONE
+        quizzesFragment_recycler.visibility = View.VISIBLE
     }
 
 

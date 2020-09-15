@@ -71,14 +71,13 @@ interface ApiService {
                     .registerTypeAdapterFactory(NullLongToEmptyAdapterFactory<Any?>())
                     .registerTypeAdapterFactory(NullDoubleToEmptyAdapterFactory<Any?>())
                     .registerTypeAdapterFactory(NullBooleanToEmptyAdapterFactory<Any?>())
-
                     .create()
 
             return Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl("http://quiz.o2.pl/api/v1/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(ApiService::class.java)
         }

@@ -15,12 +15,11 @@ import wpa.wp.myapplication.data.db.entity.quiz.Quiz
     QuizDetails::class,
     Item::class
     ],
-    version = 4
+    version = 1
 )
 @TypeConverters(QuizConverters::class, QuizDetailsConverters::class)
 abstract class WPDatabase: RoomDatabase() {
 
     abstract fun quizDao(): QuizDao
 
-    abstract fun detailsDao(): DetailsDao
 }

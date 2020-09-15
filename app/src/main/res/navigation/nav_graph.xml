@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/categoriesListFragment"
         android:name="wpa.wp.myapplication.ui.quizzes.CategoriesListFragment"
-        android:label="Choose Category"
+        android:label="@string/choose_category"
         tools:layout="@layout/quizes_list_fragment">
 
 
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/quizFragment"
         android:name="wpa.wp.myapplication.ui.quizzes.QuizFragment"
-        android:label="QUIZ"
+        android:label="@string/quiz"
         tools:layout="@layout/quiz_fragment" >
 
         <argument
@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/quizzesListFragment"
         android:name="wpa.wp.myapplication.ui.quizzes.QuizzesListFragment"
-        android:label="Choose quiz" >
+        android:label="@string/choose_quiz" >
 
         <argument
             android:name="category"
@@ -46,11 +46,20 @@
     <fragment
         android:id="@+id/quizResultsFragment"
         android:name="wpa.wp.myapplication.ui.quizzes.QuizResultsFragment"
-        android:label="Result"
+        android:label="@string/result"
         tools:layout="@layout/fragment_quiz_results" >
 
         <argument
             android:name="id"
             app:argType="long"/>
     </fragment>
+    <fragment
+        android:id="@+id/finishedQuizzesFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.FinishedQuizzesFragment"
+        android:label="@string/finished"
+        tools:layout="@layout/finished_quizzes_fragment" />
+    <fragment
+        android:id="@+id/unFinishedQuizzesFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.UnFinishedQuizzesFragment"
+        android:label="@string/unfinished_quiz" />
 </navigation>

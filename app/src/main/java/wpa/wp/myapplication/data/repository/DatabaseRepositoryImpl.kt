@@ -1,5 +1,7 @@
 package wpa.wp.myapplication.data.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -18,6 +20,27 @@ class DatabaseRepositoryImpl(
 ) : DatabaseRepository {
 
     private val compositeDisposable = CompositeDisposable()
+    override val itemLoaded: LiveData<Boolean>
+        get() = _itemLoaded
+    private val _itemLoaded = MutableLiveData(false)
+
+    override fun loadEverything() {
+        quizApiRepository.getQuizzes()
+        compositeDisposable.add(
+            quizApiRepository.quizDownloaded.subscribeOn(Schedulers.io()).subscribe{
+                it?.let {
+                    Timber.tag("NOPE").d("Lets insert")
+                    insertQuiz(it)
+                    for(i in it.items) getQuizDetails(i.id)
+                }
+            }
+        )
+
+    }
+
+    override fun checkIfItemsLoaded(): Single<List<Item>> {
+        return quizDao.checkIfItemsLoaded()
+    }
 
     private fun insertQuiz(quiz: Quiz) {
         compositeDisposable.add(
@@ -33,6 +56,7 @@ class DatabaseRepositoryImpl(
                 for (item in quiz.items) quizDao.insertItem(item)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
                 Timber.tag("NOPE").d("item in database")
+                _itemLoaded.postValue(true)
             }
         )
     }
@@ -43,12 +67,13 @@ class DatabaseRepositoryImpl(
                 quizDao.insertQuizDetails(quizDetails)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
                 Timber.tag("NOPE").d("quizzes details in in database")
+                compositeDisposable.clear()
             }
         )
     }
 
-    override fun getQuizzes() {
-        quizApiRepository.getQuizes()
+    override fun getQuizzesFromApi() {
+        quizApiRepository.getQuizzes()
         compositeDisposable.add(
             quizApiRepository.quizDownloaded.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
                 it?.let {
@@ -62,13 +87,17 @@ class DatabaseRepositoryImpl(
     override fun getQuizDetails(id: Long) {
         quizApiRepository.getQuizDetails(id)
         compositeDisposable.add(
-            quizApiRepository.quizDetailsDownloaded.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
+            quizApiRepository.quizDetailsDownloaded.subscribeOn(Schedulers.io()).subscribe {
                 it?.let {
                     Timber.tag("NOPE").d("Lets insert details")
                     insertQuizDetails(it)
                 }
             }
         )
+    }
+
+    override fun getFinishedQuizzes(): Flowable<List<QuizDetails>> {
+        return quizDao.getFinishedQuizzes()
     }
 
     override fun getQuizList(): Flowable<List<Item>> {
@@ -89,5 +118,9 @@ class DatabaseRepositoryImpl(
 
     override fun insertAnswers(quizDetails: QuizDetails) {
         quizDao.insertQuizDetails(quizDetails)
+    }
+
+    override fun getUnFinishedQuizzes(): Flowable<List<QuizDetails>> {
+        return quizDao.getUnFinishedQuizzes()
     }
 }

@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">WPApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="finishQuiz">Zakończ quiz</string>
+    <string name="quizzesNumber">Quizzes Number</string>
+    <string name="unfinished">Nieukonczone</string>
+    <string name="previousAttemptScore">Poprzedni wynik</string>
+    <string name="previousAttemptDate">Data podejścia</string>
+    <string name="awaiting_for_finish">Oczekiwanie na dokończenie</string>
+    <string name="no_internet">Brak internetu</string>
+    <string name="no_internet_message">Włącz internet aby poprawnie korzystać z aplikacji!</string>
+    <string name="questionnaire">Gratulacje!! To tylko ankieta</string>
+    <string name="choose_quiz">Wybierz quiz</string>
+    <string name="choose_category">Wybierz kategorię</string>
+    <string name="quiz">Quiz</string>
+    <string name="quizzes">Quizy</string>
+    <string name="finished">Ukończone</string>
+    <string name="unfinished_quiz">Oczekujące</string>
+    <string name="choose_language">Wybierz język</string>
+    <string name="choose_language_text">Wybierz preferowany język</string>
+    <string name="result">Wynik</string>
+    <string name="category_selection">Wybór kategorii i quiz\'ów</string>
+    <string name="category_selection_selection">Wybierz odpowiednią kategorię i quiz w niej się znajdujący</string>
+    <string name="finished_screen">Ukończone quizy</string>
+    <string name="finished_screen_selection">Po teście, możesz przejść do ukończonych/oczekujących quiz\'ów</string>
+    <string name="multi_language">Wybór języka</string>
+    <string name="multi_language_selection">Wybierz odpowiedni język</string>
+    <string name="get_started_button">Rozpocznij!</string>
+    <string name="skip_button">Pomiń</string>
+    <string name="next_button">Następny</string>
+</resources>

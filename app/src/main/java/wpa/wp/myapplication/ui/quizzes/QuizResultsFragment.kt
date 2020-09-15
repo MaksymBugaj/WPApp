@@ -31,8 +31,13 @@ class QuizResultsFragment : DaggerFragment() {
         getArgs()
 
         quizResultsViewModel.quizDetails.observe(viewLifecycleOwner, Observer { quizDetails ->
-            quizDetails.previousScore?.let {
+            Timber.tag("NOPE").d("Result!!! ${quizDetails.previousScore}")
+            Timber.tag("NOPE").d("size!!! ${quizDetails.userAnswers?.size}")
+            Timber.tag("NOPE").d("unfinished!!! ${quizDetails.unfinished}")
+            if(quizDetails.previousScore != null){
                 displayScore(quizDetails)
+            } else {
+                quizResults_scoreComment.text = resources.getText(R.string.questionnaire)
             }
         })
     }
@@ -57,9 +62,10 @@ class QuizResultsFragment : DaggerFragment() {
     private fun displayScore(quizDetails: QuizDetails){
 
         var text: String = ""
-        for (rate in quizDetails.rates!!){
-            if(rate.to?.toInt()!! > quizDetails.previousScore!! && rate.from!!.toInt()!! <= quizDetails.previousScore) text = rate.content!!
+        for (rate in quizDetails.rates){
+            if(rate.to?.toInt()!! > quizDetails.previousScore!! && rate.from!!.toInt() <= quizDetails.previousScore) text = rate.content!!
         }
+        Timber.tag("NOPE").d("Whats there and why not a thing? ${quizDetails.previousScore}")
         val percentText = "${quizDetails.previousScore} %"
         quizResults_score.text = percentText
         quizResults_scoreComment.text = text

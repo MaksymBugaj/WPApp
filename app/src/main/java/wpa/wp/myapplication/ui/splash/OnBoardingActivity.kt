@@ -10,11 +10,13 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dagger.android.support.DaggerAppCompatActivity
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.ui.MainActivity
+import wpa.wp.myapplication.util.language.LanguagePreference
 
 
 class OnBoardingActivity : DaggerAppCompatActivity() {
@@ -27,26 +29,19 @@ class OnBoardingActivity : DaggerAppCompatActivity() {
     var btnGetStarted: Button? = null
     var btnAnim: Animation? = null
     var tvSkip: TextView? = null
+    private lateinit var langPreference: LanguagePreference
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // make the activity on full screen
-
-
-        // make the activity on full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-
-        // when this activity is about to be launch we need to check if its openened before or not
-
-
-        // when this activity is about to be launch we need to check if its openened before or not
         if (restorePrefData()) {
             val mainActivity = Intent(applicationContext, MainActivity::class.java)
             startActivity(mainActivity)
@@ -54,78 +49,52 @@ class OnBoardingActivity : DaggerAppCompatActivity() {
         }
         setContentView(R.layout.activity_on_boarding)
 
-
-
-
-        // ini views
-
-        // ini views
         btnNext = findViewById(R.id.btn_next)
         btnGetStarted = findViewById(R.id.btn_get_started)
         tabIndicator = findViewById(R.id.tab_indicator)
         btnAnim = AnimationUtils.loadAnimation(applicationContext, R.anim.button_animation)
         tvSkip = findViewById(R.id.tv_skip)
 
-        // fill list screen
 
-
-        // fill list screen
         val mList: MutableList<ScreenItem> = ArrayList()
         mList.add(
             ScreenItem(
-                "Fresh Food",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",
-                R.drawable.img1
+                resources.getText(R.string.category_selection).toString(),
+                resources.getText(R.string.category_selection_selection).toString(),
+                R.drawable.ic_quiz_list
             )
         )
         mList.add(
             ScreenItem(
-                "Fast Delivery",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",
-                R.drawable.img2
+                resources.getText(R.string.finished_screen).toString(),
+                resources.getText(R.string.finished_screen_selection).toString(),
+                R.drawable.ic_done_all
             )
         )
         mList.add(
             ScreenItem(
-                "Easy Payment",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",
-                R.drawable.img3
+                resources.getText(R.string.multi_language).toString(),
+                resources.getText(R.string.multi_language_selection).toString(),
+                R.drawable.ic_poland_flag
             )
         )
 
-        // setup viewpager
-
-        // setup viewpager
         screenPager = findViewById(R.id.screen_viewpager)
         introViewPagerAdapter = IntroViewPager(this, mList)
         screenPager!!.setAdapter(introViewPagerAdapter)
 
-
-        // setup tablayout with viewpager
-
-
-        // setup tablayout with viewpager
         tabIndicator!!.setupWithViewPager(screenPager)
 
-        // next button click Listner
-
-
-        // next button click Listner
         btnNext!!.setOnClickListener {
                 position = screenPager!!.getCurrentItem()
                 if (position < mList.size) {
                     position++
                     screenPager!!.setCurrentItem(position)
                 }
-                if (position == mList.size - 1) { // when we rech to the last screen
-
-                    // TODO : show the GETSTARTED Button and hide the indicator and the next button
-                    loaddLastScreen()
+                if (position == mList.size - 1) {
+                    loadLastScreen()
                 }
-
         }
-
-        // tablayout add change listener
 
         tabIndicator!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -140,41 +109,22 @@ class OnBoardingActivity : DaggerAppCompatActivity() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab!!.position == mList.size - 1) {
-                    loaddLastScreen()
+                    loadLastScreen()
                 }
             }
-
         })
 
-        // tablayout add change listener
-
-
-        // Get Started button click listener
-
-
-        // Get Started button click listener
         btnGetStarted!!.setOnClickListener {
-
-                //open main activity
                 val mainActivity = Intent(applicationContext, MainActivity::class.java)
                 startActivity(mainActivity)
-                // also we need to save a boolean value to storage so next time when the user run the app
-                // we could know that he is already checked the intro screen activity
-                // i'm going to use shared preferences to that process
                 savePrefsData()
                 finish()
-
         }
-
-        // skip button click listener
-
-
-        // skip button click listener
         tvSkip!!.setOnClickListener{
-
                 screenPager!!.setCurrentItem(mList.size)
-
         }
+
+        if(!restorePrefData()) chooseLanguage()
     }
 
     private fun restorePrefData(): Boolean {
@@ -192,17 +142,15 @@ class OnBoardingActivity : DaggerAppCompatActivity() {
         )
         val editor = pref.edit()
         editor.putBoolean("isIntroOpnend", true)
-        editor.commit()
+        editor.apply()
     }
 
-    // show the GETSTARTED Button and hide the indicator and the next button
-    private fun loaddLastScreen() {
+
+    private fun loadLastScreen() {
         btnNext!!.visibility = View.INVISIBLE
         btnGetStarted!!.visibility = View.VISIBLE
         tvSkip!!.visibility = View.INVISIBLE
         tabIndicator!!.visibility = View.INVISIBLE
-        // TODO : ADD an animation the getstarted button
-        // setup animation
         btnGetStarted!!.animation = btnAnim
     }
 
@@ -212,6 +160,28 @@ class OnBoardingActivity : DaggerAppCompatActivity() {
         tvSkip!!.visibility = View.VISIBLE
         tabIndicator!!.visibility = View.VISIBLE
     }
+
+    private fun chooseLanguage() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.choose_language)
+        builder.setMessage(resources.getString(R.string.choose_language_text))
+        builder.setNeutralButton("english") { dialog, _ ->
+            selectLanguage("en")
+            dialog.dismiss()
+        }
+        builder.setPositiveButton("polish") { dialog, _ ->
+            selectLanguage("pl")
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+    private fun selectLanguage(lang: String) {
+        val languagePreference = LanguagePreference(applicationContext)
+        languagePreference.setLanguage(lang)
+    }
+
+
 }
 
 data class ScreenItem(

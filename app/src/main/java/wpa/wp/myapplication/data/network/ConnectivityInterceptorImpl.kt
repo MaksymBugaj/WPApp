@@ -25,7 +25,6 @@ class ConnectivityInterceptorImpl(
         ) as ConnectivityManager
         var res = false
         connectivityManager.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     it.getNetworkCapabilities(connectivityManager.activeNetwork)?.apply {
                         res = when {
@@ -37,10 +36,7 @@ class ConnectivityInterceptorImpl(
                 } else {
                     TODO("VERSION.SDK_INT < M")
                 }
-            } else {
-                TODO("VERSION.SDK_INT < LOLLIPOP")
             }
-        }
         return res
     }
 }

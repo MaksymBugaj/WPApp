@@ -29,25 +29,10 @@ class QuizAdapter(
     private var itemsFinished: List<QuizDetails> = emptyList()
     private var categories: List<CategoryX> = emptyList()
     private lateinit var listener: OnQuizItemClickListener
+    private val listOfUnfinishedQuizzes = mutableListOf<Long>()
 
-    private val isCategoryTrue = 1
-    private val isCategoryFalse = 0
-
-
-    /* override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-         val inflater = LayoutInflater.from(parent.context)
-         val viewHolderBinding = QuizItemBinding.inflate(inflater, parent, false)
-         return ViewHolder(
-             binding = viewHolderBinding,
-             lifecycleOwner = lifecycleOwner,
-             listenerItem = onQuizClickListener
-         )
-     }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        /*val layout =
-            LayoutInflater.from(parent.context).inflate(R.layout.category_item, parent, false)
-        return ViewHolder(layout, listenerItem = listener)*/
         return when (isCategory) {
             true -> {
                 val layout =
@@ -70,14 +55,6 @@ class QuizAdapter(
         }
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//        return when (isCategory){
-//            true -> isCategoryTrue
-//            else -> isCategoryFalse
-//        }
-//    }
-
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (isCategory) {
             true -> {
@@ -85,9 +62,17 @@ class QuizAdapter(
             }
             false -> {
                 if (itemsFinished.size != 0) {
+                    val quiz = getProperQuizDetails(items[position].id, itemsFinished)
+                    quiz?.unfinished?.let {
+                        if(quiz.unfinished == true)
+                        listOfUnfinishedQuizzes.add(quiz.id)
+                    }
+                    if(listOfUnfinishedQuizzes.contains(quiz?.id) && quiz?.unfinished == false) {
+                        listOfUnfinishedQuizzes.remove(quiz.id)
+                    }
                     (holder as QuizViewHolder).bind(
                         items[position],
-                        getProperQuizDetails(items[position].id, itemsFinished)
+                        quiz
                     )
                 } else (holder as QuizViewHolder).bind(items[position], null)
             }
@@ -95,8 +80,8 @@ class QuizAdapter(
         }
     }
 
-    fun getProperQuizDetails(id: Long, list: List<QuizDetails>): QuizDetails? {
-        return list.firstOrNull() { it.id == id }
+    private fun getProperQuizDetails(id: Long, list: List<QuizDetails>): QuizDetails? {
+        return list.firstOrNull { it.id == id }
     }
 
     fun initListener(listener: OnQuizItemClickListener) {
@@ -174,36 +159,17 @@ class QuizAdapter(
                 groupFinished.visibility = View.VISIBLE
                 dateAttempted.text = convertLongToTime(it.finishedDate!!)
                 previousScore.text = it.previousScore.toString()
-                if(it.unfinished!!) {
+                if(it.unfinished!! && listOfUnfinishedQuizzes.contains(quizDetails.id)) {
                     unfinished.visibility = View.VISIBLE
-                    previousScore.visibility = View.INVISIBLE
+                    previousScore.text = itemView.resources.getText(R.string.awaiting_for_finish)
                 }
             }
-
-
         }
 
-        fun convertLongToTime(time: Long): String {
+        private fun convertLongToTime(time: Long): String {
             val date = Date(time)
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             return format.format(date)
         }
     }
-
-    /*inner class ViewHolder(
-        private val binding: QuizItemBinding,
-        private val lifecycleOwner: LifecycleOwner,
-        private val listenerItem: ViewHolderClickListener
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        private val text1: TextView =
-
-        fun bind(item: Item){
-            binding.quizItem = item
-//            binding.lifecycleOwner = lifecycleOwner
-            binding.quizItemListener = listenerItem
-            binding.executePendingBindings()
-
-        }
-    }*/
 }

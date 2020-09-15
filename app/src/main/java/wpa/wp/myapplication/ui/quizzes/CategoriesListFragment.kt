@@ -1,17 +1,22 @@
 package wpa.wp.myapplication.ui.quizzes
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.quizes_list_fragment.*
 import kotlinx.android.synthetic.main.quizes_list_fragment.view.*
+import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_progress
 import timber.log.Timber
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.quiz.CategoryX
@@ -29,11 +34,8 @@ class CategoriesListFragment : DaggerFragment() {
         viewModelProviderFactory
     }
 
-
-
     private val compositeDisposable = CompositeDisposable()
     private lateinit var adapter: QuizAdapter
-    private val quizList = mutableListOf<Item>()
     private val categories = mutableListOf<CategoryX>()
 
     override fun onCreateView(
@@ -48,49 +50,88 @@ class CategoriesListFragment : DaggerFragment() {
         view.quizzesFragment_recycler.layoutManager = LinearLayoutManager(view.context)
         view.quizzesFragment_recycler.adapter = adapter
         initRecyclerListener()
+
+        compositeDisposable.add(
+            categoriesListViewModel.data.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    it?.let { showQuizzesList(it) }
+                }
+        )
+
+        categoriesListViewModel.dataDownloaded.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it) {
+                    Timber.tag("NOPE").d("click available")
+                    quizzesFragment_progress.visibility = View.GONE
+                    quizzesFragment_recycler.visibility = View.VISIBLE
+                }
+            }
+
+        })
+
+        //fixme out of memory error
+        if(!restorePrefData()){
+//            loadAll()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         categoriesListViewModel.getCategories()
-
-        compositeDisposable.add(
-            categoriesListViewModel.data.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    it?.let { showQuizzesList(it) }
-                }
-        )
     }
 
-    private fun showQuizzesList(quiz: List<Item>){
-
-        val items = mutableListOf<Item>()
-        for(item in quiz){
-//            Timber.tag("NOPE").d("categoryXXX ${item.mainPhoto.url}")
-//            Timber.tag("NOPE").d("categoryXXX ${item.id}")
-
-            if (!categories.contains(item.category))categories.add(item.category)
-            if (!quizList.contains(item))quizList.add(item)
-
+    private fun showQuizzesList(quiz: List<Item>) {
+        for (item in quiz) {
+            if (!categories.contains(item.category)) categories.add(item.category)
         }
-//        for(item in categories) Timber.tag("NOPE").d("category ${item.name}")
         adapter.setCategories(categories)
-
     }
 
-    private fun initRecyclerListener(){
-        adapter.initListener(object : QuizAdapter.OnQuizItemClickListener{
+    private fun initRecyclerListener() {
+        adapter.initListener(object : QuizAdapter.OnQuizItemClickListener {
             override fun onItemClick(position: Int) {
-                Timber.tag("NOPE").d("on click ${quizList[position]}")
-                //quizViewModel.selectedQuiz.onNext(quizList[position])
-//                val action = QuizzesListFragmentDirections.actionQuizesListFragmentToQuizFragment(quizList[position].id)
-//
-                val action = CategoriesListFragmentDirections.actionCategoriesListFragmentToQuizzesListFragment(categories[position].name)
+                val action =
+                    CategoriesListFragmentDirections.actionCategoriesListFragmentToQuizzesListFragment(
+                        categories[position].name
+                    )
                 findNavController().navigate(action)
             }
         })
+    }
 
+    private fun loadAll() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(R.string.download)
+        builder.setMessage(resources.getString(R.string.download_data))
+        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.setPositiveButton(resources.getText(R.string.download)) { dialog, _ ->
+            categoriesListViewModel.downloadAll()
+            savePrefsData()
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+    private fun restorePrefData(): Boolean {
+        val pref = requireContext().getSharedPreferences(
+            "myPrefs",
+            Context.MODE_PRIVATE
+        )
+        return pref.getBoolean("bulkDataLoaded", false)
+    }
+
+    private fun savePrefsData() {
+        val pref = requireContext().getSharedPreferences(
+            "myPrefs",
+            Context.MODE_PRIVATE
+        )
+        val editor = pref.edit()
+        editor.putBoolean("bulkDataLoaded", true)
+        editor.commit()
     }
 
 }

@@ -25,11 +25,21 @@ interface QuizDao {
     @Query("select * from quiz_details where id =:id")
     fun getQuizDetails(id: Long): Single<QuizDetails>
 
+    @Query("select * from item_table")
+    fun checkIfItemsLoaded(): Single<List<Item>>
+
+    @Query("select * from quiz_details where previousScore is not null")
+    fun getFinishedQuizzes(): Flowable<List<QuizDetails>>
+
+
+    @Query ("select * from quiz_details where finishedDate is not null and previousScore is null")
+    fun getUnFinishedQuizzes(): Flowable<List<QuizDetails>>
+
     //fixme improve queries?
     @Query("select * from item_table")
     fun getQuizItems(): Flowable<List<Item>>
 
-    @Query("select * from quiz_details where finishedDate is not null")
+    @Query("select * from quiz_details where previousScore is not null")
     fun getQuizDetailsFinished(): Flowable<List<QuizDetails>>
 
     @Query("select * from item_table where categoryX_name =:categoryName ")

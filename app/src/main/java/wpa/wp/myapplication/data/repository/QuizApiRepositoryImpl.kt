@@ -1,5 +1,6 @@
 package wpa.wp.myapplication.data.repository
 
+import android.util.Log
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -10,6 +11,7 @@ import timber.log.Timber
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 import wpa.wp.myapplication.data.network.ApiService
+import wpa.wp.myapplication.data.network.NoConnectivityException
 
 class QuizApiRepositoryImpl(
     private val apiService: ApiService
@@ -25,7 +27,8 @@ class QuizApiRepositoryImpl(
         get() = _quizDetailsDownloaded
     private val _quizDetailsDownloaded = PublishSubject.create<QuizDetails>()
 
-    override fun getQuizes() {
+    override fun getQuizzes() {
+        try{
         apiService.getQuizes()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -45,29 +48,38 @@ class QuizApiRepositoryImpl(
                 }
 
             })
+        } catch (e: NoConnectivityException) {
+            Timber.tag("NOPE")
+                .d("No internet connection. ${e.message}")
+        }
     }
 
     override fun getQuizDetails(id: Long) {
-        apiService.getSpecificQuiz(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<QuizDetails> {
-                override fun onSuccess(t: QuizDetails) {
-                    _quizDetailsDownloaded.onNext(t)
-                    Timber.tag("NOPE").d("we have data Quiz ${t}")
-                }
+        try {
+            apiService.getSpecificQuiz(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : SingleObserver<QuizDetails> {
+                    override fun onSuccess(t: QuizDetails) {
+                        _quizDetailsDownloaded.onNext(t)
+                        Timber.tag("NOPE").d("we have data Quiz ${t}")
+                    }
 
-                override fun onSubscribe(d: Disposable) {
-                    compositeDisposable.add(d)
-                }
+                    override fun onSubscribe(d: Disposable) {
+                        compositeDisposable.add(d)
+                    }
 
-                override fun onError(e: Throwable) {
-                    Timber.tag("NOPE")
-                        .d("Error during fetch QUIZ API ${e.message} : ${e.stackTrace} : ${e.localizedMessage} ${e.cause}")
-                }
+                    override fun onError(e: Throwable) {
+                        Timber.tag("NOPE")
+                            .d("Error during fetch QUIZ API ${e.message}")
+                    }
 
-            })
-        compositeDisposable.add(
+                })
+        } catch (e: NoConnectivityException) {
+            Timber.tag("NOPE")
+                .d("No internet connection. ${e.message}")
+        }
+        /*compositeDisposable.add(
         apiService.getSpecificQuiz2(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -75,6 +87,6 @@ class QuizApiRepositoryImpl(
                 _quizDetailsDownloaded.onNext(it)
                 Timber.tag("NOPE").d("we have data Quiz ${it}")
             }
-        )
+        )*/
     }
 }

@@ -69,7 +69,7 @@ class QuizFragment : DaggerFragment() {
                 .observeOn(AndroidSchedulers.mainThread()).subscribe {
                     Timber.tag("NOPE").d("he?")
                     it?.let {
-                        Timber.tag("NOPE").d("passed quiz ${it.id}")
+                        Timber.tag("NOPE").d("Quiz passed quiz ${it.id}")
                         viewModel.downloadQuizDetails(it.id)
                     }
                 }
@@ -103,7 +103,7 @@ class QuizFragment : DaggerFragment() {
     private fun createQuiz(quizDetails: QuizDetails) {
         //todo change the name?
         this.quizDetails = quizDetails
-        val quizzesSize = quizDetails.questions?.size!!
+        val quizzesSize = quizDetails.questions.size
 
         initProgressListener(object : ProgressListener {
             override fun onAnswerSelected(answer: Pair<String, String>) {
@@ -150,40 +150,41 @@ class QuizFragment : DaggerFragment() {
     private fun checkAnswers(quizDetails: QuizDetails) {
         var countedCorrectAnswers = 0
         val correctAnswer = mutableMapOf<String, Boolean>()
-        for (i in quizDetails.questions!!.indices) {
-            if(listOfAnswers.containsValue(quizDetails.questions[i].text!!)) {
+        for (i in quizDetails.questions.indices) {
+            if(listOfAnswers.contains(quizDetails.questions[i].text!!)) {
                 val getAnswer = listOfAnswers.getValue(quizDetails.questions[i].text!!)
                 for (j in quizDetails.questions[i].answers?.indices!!) {
                     if (getAnswer == quizDetails.questions[i].answers?.get(j)?.text!!) {
                         quizDetails.questions[i].answers?.get(j)?.isCorrect?.let {
-                            if (quizDetails.questions[i].answers?.get(j)?.isCorrect!! == 1)
+                            if (quizDetails.questions[i].answers?.get(j)?.isCorrect!! == 1) {
                                 correctAnswer[quizDetails.questions[i].text!!] = true
-                            countedCorrectAnswers += 1
+                                countedCorrectAnswers += 1
+                            }
                         }
                     }
                 }
             }
-//             getAnswer == quizDetails.questions[i].answer
-
-//            Timber.tag("NOPE").d("Correct answer: ${quizDetails.questions[i].answer} my answer: $getAnswer")
         }
+        Timber.tag("NOPE").d("listOfAnswers!!! ${listOfAnswers.size} counted correct: $countedCorrectAnswers")
 
-        val percent = (countedCorrectAnswers / quizDetails.questions.size) * 100
+        var percent = 0
+        if(countedCorrectAnswers == 0){} else percent = (countedCorrectAnswers * 100/ quizDetails.questions.size)
+        Timber.tag("NOPE").d("Finish!!! percent ${percent}")
         val map: Map<String, String> = listOfAnswers
         val quizToInsert = quizDetails.copy(
             userAnswers = map,
             finishedDate = getFinishedDate(),
             unfinished = false,
-            previousScore = percent
+            previousScore = percent.toInt()
         )
         viewModel.insertAnsweredQuiz(quizToInsert)
-        saveQuizAndNavigateToResults(quizDetails)
+        saveQuizAndNavigateToResults(quizToInsert)
     }
 
 
     private fun saveQuizAndNavigateToResults(quizDetails: QuizDetails) {
         Timber.tag("NOPE").d("Finish!!! ${listOfAnswers.size}")
-        val action = QuizFragmentDirections.actionQuizFragmentToQuizResultsFragment(quizDetails.id!!)
+        val action = QuizFragmentDirections.actionQuizFragmentToQuizResultsFragment(quizDetails.id)
         findNavController().navigate(action)
 
     }
@@ -193,8 +194,8 @@ class QuizFragment : DaggerFragment() {
         return date.time
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         if(::quizDetails.isInitialized) {
             val quizToInsert = quizDetails.copy(
                 userAnswers = listOfAnswers,
@@ -213,7 +214,6 @@ interface ProgressListener {
     fun buttonEndListener()
 }
 
-//fixme to reconsider map and check
 class DemoCollectionAdapter(
     fragment: Fragment,
     private val quizDetails: QuizDetails,
@@ -221,28 +221,21 @@ class DemoCollectionAdapter(
     private val map: Map<String, String>?
 ) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = quizDetails.questions?.size!!
+    override fun getItemCount(): Int = quizDetails.questions.size
 
     override fun createFragment(position: Int): Fragment {
-        // Return a NEW fragment instance in createFragment(int)
-        /*fragment.arguments = Bundle().apply {
-            // Our object is just an integer :-P
-            putInt(ARG_OBJECT, position + 1)
-        }*/
+
         return if (position == itemCount - 1) DemoObjectFragment(
-            quizDetails.questions?.get(position)!!,
+            quizDetails.questions[position],
             listener,
             true,
             map
         )
         else
-            DemoObjectFragment(quizDetails.questions?.get(position)!!, listener, false, map)
+            DemoObjectFragment(quizDetails.questions[position], listener, false, map)
     }
 }
 
-
-// Instances of this class are fragments representing a single
-// object in our collection.
 class DemoObjectFragment(
     private val question: Question,
     private val listener: ProgressListener,
@@ -281,11 +274,9 @@ class DemoObjectFragment(
             }
             radioGroup.addView(radioButton)
             if(!map.isNullOrEmpty()){
-                Timber.tag("NOPE").d("map isze: ${map.size}")
                 if(map.containsKey(question.text)){
                     if(map.containsValue(radioButton.text.toString())) {
                         radioButton.isChecked = true
-                        Timber.tag("NOPE").d("HE HEHEHEHEHE")
                     }
                 }
             }

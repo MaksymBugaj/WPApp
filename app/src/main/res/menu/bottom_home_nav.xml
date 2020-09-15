@@ -3,19 +3,19 @@
     <item
         android:id="@+id/categoriesListFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_arrow_forward"
-        android:title="Quizzes" />
+        android:icon="@drawable/ic_quiz_list"
+        android:title="@string/quizzes" />
 
     <item
-        android:id="@+id/findFlatmates"
+        android:id="@+id/finishedQuizzesFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_arrow_forward"
-        android:title="Finished" />
+        android:icon="@drawable/ic_done_all"
+        android:title="@string/finished" />
 
     <item
-        android:id="@+id/userFragment"
+        android:id="@+id/unFinishedQuizzesFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_arrow_forward"
-        android:title="Unfinished" />
+        android:icon="@drawable/ic_unfinished"
+        android:title="@string/unfinished_quiz" />
 
 </menu>

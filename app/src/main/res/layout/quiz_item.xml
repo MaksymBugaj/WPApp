@@ -42,10 +42,12 @@
 
             <TextView
                 android:id="@+id/quizItem_unfinished"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:text="@string/unfinished"
-                style="@style/TextAppearance.MaterialComponents.Headline6"
+                style="@style/TextAppearance.MaterialComponents.Headline2"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:textColor="@android:color/holo_red_dark"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/quizItem_topImage"
@@ -93,14 +95,13 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quizItem_itemName" />
+                app:layout_constraintTop_toBottomOf="@id/quizItemLayout_dateAttempted" />
 
             <TextView
                 android:id="@+id/quizItem_previousAttemptScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
@@ -122,14 +123,13 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/quizItemLayout_previousAttemptScore"
-                app:layout_constraintTop_toBottomOf="@id/quizItemLayout_previousAttemptScore" />
+                app:layout_constraintTop_toBottomOf="@id/quizItem_itemName" />
 
             <TextView
                 android:id="@+id/quizItem_dateAttempted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"

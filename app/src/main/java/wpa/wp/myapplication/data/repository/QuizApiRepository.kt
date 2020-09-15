@@ -9,7 +9,7 @@ interface QuizApiRepository {
     val quizDownloaded: PublishSubject<Quiz>
     val quizDetailsDownloaded: PublishSubject<QuizDetails>
 
-    fun getQuizes()
+    fun getQuizzes()
 
     fun getQuizDetails(id: Long)
 }

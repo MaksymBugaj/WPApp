@@ -9,6 +9,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Item
 import wpa.wp.myapplication.data.repository.DatabaseRepository
@@ -32,6 +33,7 @@ class QuizzesListViewModel @Inject constructor(
     }
 
     private fun getFinishedQuizzes() {
+        Timber.tag("NOPE").d("get Finished")
         compositeDisposable.add(
         databaseRepository.getFinishedQuizDetailsList().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
             _finished.postValue(it)
