@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.quizes_list_fragment.*
 import kotlinx.android.synthetic.main.quizes_list_fragment.view.*
-import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_progress
-import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_recycler
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.di.ViewModelProviderFactory

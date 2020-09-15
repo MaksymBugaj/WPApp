@@ -16,7 +16,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.quizes_list_fragment.*
 import kotlinx.android.synthetic.main.quizes_list_fragment.view.*
-import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_progress
 import timber.log.Timber
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.quiz.CategoryX

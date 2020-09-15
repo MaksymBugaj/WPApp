@@ -2,9 +2,7 @@ package wpa.wp.myapplication.ui
 
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -21,8 +19,8 @@ import timber.log.Timber
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.util.language.ContextWrapper
 import wpa.wp.myapplication.util.language.LanguagePreference
-import java.util.concurrent.TimeUnit
 import wpa.wp.myapplication.util.showDialog
+import java.util.concurrent.TimeUnit
 
 class MainActivity : DaggerAppCompatActivity() {
 

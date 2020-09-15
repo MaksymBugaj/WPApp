@@ -1,6 +1,5 @@
 package wpa.wp.myapplication.data.repository
 
-import android.util.Log
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
