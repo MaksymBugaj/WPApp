@@ -34,10 +34,9 @@ class QuizResultsFragment : DaggerFragment() {
             Timber.tag("NOPE").d("Result!!! ${quizDetails.previousScore}")
             Timber.tag("NOPE").d("size!!! ${quizDetails.userAnswers?.size}")
             Timber.tag("NOPE").d("unfinished!!! ${quizDetails.unfinished}")
-            if(quizDetails.previousScore != null){
+            if(quizDetails.questions[0].answer == "ANSWER_HOT_OR_NOT_TEXT") quizResults_scoreComment.text = resources.getText(R.string.questionnaire)
+            else if(quizDetails.previousScore != null){
                 displayScore(quizDetails)
-            } else {
-                quizResults_scoreComment.text = resources.getText(R.string.questionnaire)
             }
         })
     }
