@@ -28,11 +28,6 @@ interface ApiService {
         @Path("id_quizu") id: Long
     ): Single<QuizDetails>
 
-    @GET("quiz/{id_quizu}/0")
-    fun getSpecificQuiz2(
-        @Path("id_quizu") id: Long
-    ): Flowable<QuizDetails>
-
 
     companion object{
         operator fun invoke(

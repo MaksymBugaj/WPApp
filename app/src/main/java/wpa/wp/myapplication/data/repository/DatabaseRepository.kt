@@ -12,7 +12,6 @@ interface DatabaseRepository {
 
     val itemLoaded : LiveData<Boolean>
 
-    //zostaje
     fun loadEverything()
 
     fun checkIfItemsLoaded(): Single<List<Item>>
@@ -23,11 +22,6 @@ interface DatabaseRepository {
 
     fun getUnFinishedQuizzes(): Flowable<List<QuizDetails>>
 
-
-    /////////////////////////////////////////
-    //todo rename funs
-
-
     fun getQuizDetails(id: Long)
 
     fun getFinishedQuizDetailsList(): Flowable<List<QuizDetails>>
@@ -36,7 +30,6 @@ interface DatabaseRepository {
 
     fun getItemsByCategories(category: String): Single<List<Item>>
 
-//    fixme temporary, to be replaced
     fun getQuizDetailsTemp(id: Long): Flowable<QuizDetails>
 
     fun insertAnswers(quizDetails: QuizDetails)
