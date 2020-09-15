@@ -32,7 +32,7 @@ interface QuizDao {
     fun getFinishedQuizzes(): Flowable<List<QuizDetails>>
 
 
-    @Query ("select * from quiz_details where finishedDate is not null and previousScore is null")
+    @Query("select * from quiz_details where finishedDate is not null and previousScore is null")
     fun getUnFinishedQuizzes(): Flowable<List<QuizDetails>>
 
     //fixme improve queries?

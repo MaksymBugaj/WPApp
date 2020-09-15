@@ -1,9 +1,7 @@
 package wpa.wp.myapplication.ui.quizzes
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,13 +17,9 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.quiz_item.view.*
 import kotlinx.android.synthetic.main.quizes_list_fragment.*
 import kotlinx.android.synthetic.main.quizes_list_fragment.view.*
-import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_progress
-import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_recycler
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
-import wpa.wp.myapplication.data.db.entity.quiz.Item
 import wpa.wp.myapplication.di.ViewModelProviderFactory
-import wpa.wp.myapplication.ui.QuizAdapter
 import wpa.wp.myapplication.util.split
 import java.text.SimpleDateFormat
 import java.util.*

@@ -3,10 +3,8 @@ package wpa.wp.myapplication.data.repository
 import androidx.lifecycle.LiveData
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.subjects.PublishSubject
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Item
-import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 
 interface DatabaseRepository {
 

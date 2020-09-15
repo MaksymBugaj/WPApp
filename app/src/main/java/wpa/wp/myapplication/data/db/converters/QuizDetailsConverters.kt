@@ -2,31 +2,13 @@ package wpa.wp.myapplication.data.db.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.google.gson.TypeAdapter
-import com.google.gson.TypeAdapterFactory
 import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
-import com.google.gson.stream.JsonWriter
 import wpa.wp.myapplication.data.db.entity.details.*
-import java.io.IOException
 
 
 class QuizDetailsConverters {
 
-    /*@TypeConverter
-    fun toJson(value: Any?): Any {
-        val gson = Gson()
-        val type = object : TypeToken<Any>() {}.type
-        return gson.toJson(value, type)
-    }
 
-    @TypeConverter
-    fun jsonTo(value: String) :Any {
-        if (value == "null")
-            return Any()
-        return Gson().fromJson(value, Any())
-    }*/
 
     @TypeConverter
     fun categoryListToJson(value: List<Category>?): String {
@@ -108,129 +90,4 @@ class QuizDetailsConverters {
         return gson.toJson(map)
     }
 
-}
-
-class NullIntToEmptyAdapterFactory<T> : TypeAdapterFactory {
-    override fun <T> create(gson: Gson, type: TypeToken<T>): TypeAdapter<T>? {
-        val rawType = type.rawType as Class<T>
-        return (if (rawType != Int::class.java) {
-            null
-        } else IntNullAdapter() as TypeAdapter<T>)
-    }
-}
-
-class IntNullAdapter : TypeAdapter<Int?>() {
-    @Throws(IOException::class)
-    override fun read(reader: JsonReader): Int {
-        // TODO Auto-generated method stub
-        if (reader.peek() === JsonToken.NULL) {
-            reader.nextNull()
-            return 0
-        }
-        return reader.nextInt()
-    }
-
-    @Throws(IOException::class)
-    override fun write(writer: JsonWriter, value: Int?) {
-        // TODO Auto-generated method stub
-        if (value == null) {
-            writer.nullValue()
-            return
-        }
-        writer.value(value)
-    }
-}
-
-class NullLongToEmptyAdapterFactory<T> : TypeAdapterFactory {
-    override fun <T> create(gson: Gson, type: TypeToken<T>): TypeAdapter<T>? {
-        val rawType = type.rawType as Class<T>
-        return (if (rawType != Long::class.java) {
-            null
-        } else LongNullAdapter() as TypeAdapter<T>)
-    }
-}
-
-class LongNullAdapter : TypeAdapter<Long?>() {
-    @Throws(IOException::class)
-    override fun read(reader: JsonReader): Long {
-        // TODO Auto-generated method stub
-        if (reader.peek() === JsonToken.NULL) {
-            reader.nextNull()
-            return 0
-        }
-        return reader.nextLong()
-    }
-
-    @Throws(IOException::class)
-    override fun write(writer: JsonWriter, value: Long?) {
-        // TODO Auto-generated method stub
-        if (value == null) {
-            writer.nullValue()
-            return
-        }
-        writer.value(value)
-    }
-}
-
-class NullDoubleToEmptyAdapterFactory<T> : TypeAdapterFactory {
-    override fun <T> create(gson: Gson, type: TypeToken<T>): TypeAdapter<T>? {
-        val rawType = type.rawType as Class<T>
-        return (if (rawType != Double::class.java) {
-            null
-        } else DoubleNullAdapter() as TypeAdapter<T>)
-    }
-}
-
-class DoubleNullAdapter : TypeAdapter<Double?>() {
-    @Throws(IOException::class)
-    override fun read(reader: JsonReader): Double {
-        // TODO Auto-generated method stub
-        if (reader.peek() === JsonToken.NULL) {
-            reader.nextNull()
-            return 0.0
-        }
-        return reader.nextDouble()
-    }
-
-    @Throws(IOException::class)
-    override fun write(writer: JsonWriter, value: Double?) {
-        // TODO Auto-generated method stub
-        if (value == null) {
-            writer.nullValue()
-            return
-        }
-        writer.value(value)
-    }
-}
-
-
-class NullBooleanToEmptyAdapterFactory<T> : TypeAdapterFactory {
-    override fun <T> create(gson: Gson, type: TypeToken<T>): TypeAdapter<T>? {
-        val rawType = type.rawType as Class<T>
-        return (if (rawType != Boolean::class.java) {
-            null
-        } else BooleanNullAdapter() as TypeAdapter<T>)
-    }
-}
-
-class BooleanNullAdapter : TypeAdapter<Boolean?>() {
-    @Throws(IOException::class)
-    override fun read(reader: JsonReader): Boolean {
-        // TODO Auto-generated method stub
-        if (reader.peek() === JsonToken.NULL) {
-            reader.nextNull()
-            return false
-        }
-        return reader.nextBoolean()
-    }
-
-    @Throws(IOException::class)
-    override fun write(writer: JsonWriter, value: Boolean?) {
-        // TODO Auto-generated method stub
-        if (value == null) {
-            writer.nullValue()
-            return
-        }
-        writer.value(value)
-    }
 }

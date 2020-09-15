@@ -1,7 +1,5 @@
 package wpa.wp.myapplication.data.network
 
-import com.google.gson.GsonBuilder
-import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import timber.log.Timber
-import wpa.wp.myapplication.data.db.converters.*
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.db.entity.quiz.Quiz
 
@@ -59,14 +56,6 @@ interface ApiService {
                 .addInterceptor(connectivityInterceptor)
                 .addInterceptor(logging)
                 .build()
-
-            val gson =
-                GsonBuilder()
-                    .registerTypeAdapterFactory(NullIntToEmptyAdapterFactory<Any?>())
-                    .registerTypeAdapterFactory(NullLongToEmptyAdapterFactory<Any?>())
-                    .registerTypeAdapterFactory(NullDoubleToEmptyAdapterFactory<Any?>())
-                    .registerTypeAdapterFactory(NullBooleanToEmptyAdapterFactory<Any?>())
-                    .create()
 
             return Retrofit.Builder()
                 .client(okHttpClient)

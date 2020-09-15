@@ -8,24 +8,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.google.gson.TypeAdapter
-import com.google.gson.TypeAdapterFactory
-import com.google.gson.reflect.TypeToken
 import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.quizes_list_fragment.*
 import kotlinx.android.synthetic.main.quizes_list_fragment.view.*
-import kotlinx.android.synthetic.main.quizes_list_fragment.view.quizzesFragment_progress
 import timber.log.Timber
 import wpa.wp.myapplication.R
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
-import wpa.wp.myapplication.data.db.entity.quiz.CategoryX
 import wpa.wp.myapplication.data.db.entity.quiz.Item
 import wpa.wp.myapplication.di.ViewModelProviderFactory
-import wpa.wp.myapplication.ui.MainActivity
 import wpa.wp.myapplication.ui.QuizAdapter
 import javax.inject.Inject
 

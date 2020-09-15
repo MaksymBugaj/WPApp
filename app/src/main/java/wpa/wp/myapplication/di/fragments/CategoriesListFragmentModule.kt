@@ -8,7 +8,6 @@ import dagger.multibindings.IntoMap
 import wpa.wp.myapplication.di.ViewModelKey
 import wpa.wp.myapplication.ui.quizzes.CategoriesListFragment
 import wpa.wp.myapplication.ui.quizzes.CategoriesListViewModel
-import wpa.wp.myapplication.ui.quizzes.QuizzesListViewModel
 
 @Module
 abstract class CategoriesListFragmentModule {

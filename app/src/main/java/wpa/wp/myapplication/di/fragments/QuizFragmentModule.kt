@@ -8,7 +8,6 @@ import dagger.multibindings.IntoMap
 import wpa.wp.myapplication.di.ViewModelKey
 import wpa.wp.myapplication.ui.quizzes.QuizFragment
 import wpa.wp.myapplication.ui.quizzes.QuizViewModel
-import javax.inject.Singleton
 
 @Module
 abstract class QuizFragmentModule {

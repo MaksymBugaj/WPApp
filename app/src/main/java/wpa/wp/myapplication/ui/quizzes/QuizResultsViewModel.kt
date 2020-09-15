@@ -3,11 +3,9 @@ package wpa.wp.myapplication.ui.quizzes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.FlowableSubscriber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscription
 import timber.log.Timber
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.data.repository.DatabaseRepository

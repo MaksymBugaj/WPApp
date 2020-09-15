@@ -56,8 +56,7 @@
     <fragment
         android:id="@+id/finishedQuizzesFragment"
         android:name="wpa.wp.myapplication.ui.quizzes.FinishedQuizzesFragment"
-        android:label="@string/finished"
-        tools:layout="@layout/finished_quizzes_fragment" />
+        android:label="@string/finished"/>
     <fragment
         android:id="@+id/unFinishedQuizzesFragment"
         android:name="wpa.wp.myapplication.ui.quizzes.UnFinishedQuizzesFragment"
