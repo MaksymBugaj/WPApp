@@ -1,10 +1,47 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:backgroundTint">@color/lightPrimaryColor</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+    </style>
+
+    <style name="ButtonStyle.Stroke">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:backgroundTint">@color/lightPrimaryColor</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:strokeWidth">2.0</item>
+        <item name="android:strokeColor">@color/textColorPrimary</item>
+    </style>
+
+    <style name="TextInputLayout">
+        <item name="boxBackgroundColor">@color/lightPrimaryColor</item>
+        <item name="boxStrokeColor">@color/dividerColor</item>
+        <item name="android:textColorHint">@color/textColorPrimary</item>
+        <item name="hintTextColor">@color/secondaryText</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="TextInputEditText">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="fontFamily">@font/roboto_bold_italic</item>
+    </style>
+
+    <style name="TextRecyclerLabel">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="fontFamily">@font/roboto_bold_italic</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
     </style>
 
 </resources>

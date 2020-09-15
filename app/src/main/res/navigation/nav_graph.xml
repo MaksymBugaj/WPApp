@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/categoriesListFragment">
+
+    <fragment
+        android:id="@+id/categoriesListFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.CategoriesListFragment"
+        android:label="@string/choose_category"
+        tools:layout="@layout/quizes_list_fragment">
+
+
+        <action
+            android:id="@+id/action_categoriesListFragment_to_quizzesListFragment"
+            app:destination="@id/quizzesListFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.QuizFragment"
+        android:label="@string/quiz"
+        tools:layout="@layout/quiz_fragment" >
+
+        <argument
+            android:name="id"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_quizFragment_to_quizResultsFragment"
+            app:destination="@id/quizResultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quizzesListFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.QuizzesListFragment"
+        android:label="@string/choose_quiz" >
+
+        <argument
+            android:name="category"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_quizzesListFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quizResultsFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.QuizResultsFragment"
+        android:label="@string/result"
+        tools:layout="@layout/fragment_quiz_results" >
+
+        <argument
+            android:name="id"
+            app:argType="long"/>
+    </fragment>
+    <fragment
+        android:id="@+id/finishedQuizzesFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.FinishedQuizzesFragment"
+        android:label="@string/finished"
+        tools:layout="@layout/finished_quizzes_fragment" />
+    <fragment
+        android:id="@+id/unFinishedQuizzesFragment"
+        android:name="wpa.wp.myapplication.ui.quizzes.UnFinishedQuizzesFragment"
+        android:label="@string/unfinished_quiz" />
+</navigation>

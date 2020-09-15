@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.quizzes.QuizFragment">
+
+    <com.google.android.material.progressindicator.ProgressIndicator
+        android:id="@+id/quizFragment_progressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Determinate"
+
+        />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/quizFragment_questionNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quizFragment_progressIndicator"
+        app:layout_constraintBottom_toTopOf="@id/quizFragment_questionsViewPager"
+        app:tabMode = "scrollable" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/quizFragment_questionsViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quizFragment_questionNumber"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

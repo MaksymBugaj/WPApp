@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+
+    </data>
+
+    <!--todo fix it and rebuild-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/quizItem_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/quizItem_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/quizItem_topImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="@drawable/abc_vector_test"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@id/quizItem_itemName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/quizItem_unfinished"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="@string/unfinished"
+                style="@style/TextAppearance.MaterialComponents.Headline2"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/quizItem_topImage"
+                app:layout_constraintEnd_toEndOf="@id/quizItem_topImage"
+                app:layout_constraintStart_toStartOf="@id/quizItem_topImage"
+                app:layout_constraintTop_toTopOf="@id/quizItem_topImage" />
+
+
+            <TextView
+                android:id="@+id/quizItem_itemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_regular"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="24sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
+                app:fontFamily="@font/roboto_regular"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/quizItem_topImage"
+                tools:text="title" />
+
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/quizItem_previousAttempGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="quizItem_dateAttempted,quizItem_previousAttemptScore,quizItemLayout_previousAttemptScore,quizItemLayout_dateAttempted" />
+
+            <TextView
+                android:id="@+id/quizItemLayout_previousAttemptScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/previousAttemptScore"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/quizItemLayout_dateAttempted" />
+
+            <TextView
+                android:id="@+id/quizItem_previousAttemptScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/quizItemLayout_previousAttemptScore"
+                app:layout_constraintStart_toEndOf="@id/quizItemLayout_previousAttemptScore"
+                app:layout_constraintTop_toTopOf="@id/quizItemLayout_previousAttemptScore"
+                tools:text="Some comment" />
+
+
+            <TextView
+                android:id="@+id/quizItemLayout_dateAttempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/previousAttemptDate"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/quizItemLayout_previousAttemptScore"
+                app:layout_constraintTop_toBottomOf="@id/quizItem_itemName" />
+
+            <TextView
+                android:id="@+id/quizItem_dateAttempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/quizItemLayout_dateAttempted"
+                app:layout_constraintStart_toEndOf="@id/quizItemLayout_dateAttempted"
+                app:layout_constraintTop_toTopOf="@id/quizItemLayout_dateAttempted"
+                tools:text="Some comment" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>

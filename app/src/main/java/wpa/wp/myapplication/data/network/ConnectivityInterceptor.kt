@@ -1,0 +1,5 @@
+package wpa.wp.myapplication.data.network
+
+import okhttp3.Interceptor
+
+interface ConnectivityInterceptor : Interceptor
