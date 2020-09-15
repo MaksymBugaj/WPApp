@@ -28,7 +28,7 @@ interface QuizDao {
     @Query("select * from item_table")
     fun checkIfItemsLoaded(): Single<List<Item>>
 
-    @Query("select * from quiz_details where previousScore is not null")
+    @Query("select * from quiz_details where previousScore is not null and unfinished is 0")
     fun getFinishedQuizzes(): Flowable<List<QuizDetails>>
 
 

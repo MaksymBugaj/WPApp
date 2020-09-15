@@ -79,14 +79,5 @@ class QuizApiRepositoryImpl(
             Timber.tag("NOPE")
                 .d("No internet connection. ${e.message}")
         }
-        /*compositeDisposable.add(
-        apiService.getSpecificQuiz2(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                _quizDetailsDownloaded.onNext(it)
-                Timber.tag("NOPE").d("we have data Quiz ${it}")
-            }
-        )*/
     }
 }

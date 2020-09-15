@@ -16,7 +16,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -24,13 +23,11 @@ import kotlinx.android.synthetic.main.fragment_question.*
 import kotlinx.android.synthetic.main.quiz_fragment.*
 import timber.log.Timber
 import wpa.wp.myapplication.R
-import wpa.wp.myapplication.data.db.entity.details.Answer
 import wpa.wp.myapplication.data.db.entity.details.Question
 import wpa.wp.myapplication.data.db.entity.details.QuizDetails
 import wpa.wp.myapplication.di.ViewModelProviderFactory
 import wpa.wp.myapplication.util.split
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class QuizFragment : DaggerFragment() {
@@ -47,7 +44,9 @@ class QuizFragment : DaggerFragment() {
     private lateinit var viewPager: ViewPager2
     private lateinit var listener: ProgressListener
     private val listOfAnswers = mutableMapOf<String, String>()
-    private var czujka6 = true
+    // rotfl ;)
+    private var quizNotDisplayed = true
+    private var quizSaved = false
 
     //holding quiz to save in db in case of leaving test
     private lateinit var quizDetails: QuizDetails
@@ -78,9 +77,9 @@ class QuizFragment : DaggerFragment() {
         viewModel.quizDetails.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Timber.tag("NOPE").d("quizDetails questions ${it.questions!!.size}")
-                if(czujka6) {
+                if(quizNotDisplayed) {
                     createQuiz(it)
-                    czujka6 = false
+                    quizNotDisplayed = false
                 }
             }
         })
@@ -177,6 +176,7 @@ class QuizFragment : DaggerFragment() {
             unfinished = false,
             previousScore = percent.toInt()
         )
+        quizSaved = true
         viewModel.insertAnsweredQuiz(quizToInsert)
         saveQuizAndNavigateToResults(quizToInsert)
     }
@@ -196,15 +196,17 @@ class QuizFragment : DaggerFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(::quizDetails.isInitialized) {
-            val quizToInsert = quizDetails.copy(
-                userAnswers = listOfAnswers,
-                finishedDate = getFinishedDate(),
-                unfinished = true
-            )
-            Timber.tag("NOPE")
-                .d("onStop!! ")
-            viewModel.insertAnsweredQuiz(quizToInsert)
+        if(!quizSaved) {
+            if (::quizDetails.isInitialized) {
+                val quizToInsert = quizDetails.copy(
+                    userAnswers = listOfAnswers,
+                    finishedDate = getFinishedDate(),
+                    unfinished = true
+                )
+                Timber.tag("NOPE")
+                    .d("onStop!! ")
+                viewModel.insertAnsweredQuiz(quizToInsert)
+            }
         }
     }
 }
